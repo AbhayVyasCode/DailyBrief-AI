@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import ChatWidget from './ChatWidget';
 import ThreeBackground from './ThreeBackground';
@@ -9,16 +10,20 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20">
-      <ThreeBackground />
-      <Navbar />
-      <main className="container mx-auto px-4 pb-24 pt-8 md:pt-24 md:pb-8 relative z-10">
+    <div id="app-root" className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20">
+      {!isHomePage && <ThreeBackground />}
+      {!isHomePage && <Navbar />}
+      <main className={isHomePage ? "w-full min-h-screen relative z-10" : "container mx-auto px-4 pb-24 pt-8 md:pt-24 md:pb-8 relative z-10"}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.4 }}
+          className=""
         >
           {children}
         </motion.div>

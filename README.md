@@ -1,4 +1,4 @@
-# NewsFlow - AI-Powered News Aggregator
+# NovaBrief - AI-Powered News Aggregator
 
 A personalized news aggregator built with React, FastAPI, LangChain, LangGraph, and Google Gemini.
 

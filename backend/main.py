@@ -24,7 +24,7 @@ app.include_router(news_router, prefix=settings.API_V1_STR + "/news", tags=["new
 @app.get("/")
 async def root():
     return {
-        "message": "Welcome to NewsFlow API",
+        "message": "Welcome to NovaBrief API",
         "version": settings.VERSION,
         "docs": "/docs"
     }

@@ -19,7 +19,7 @@ const Feed = () => {
     try {
       let categories: string[] = [];
       
-      const savedPrefs = localStorage.getItem("newsflow_preferences");
+      const savedPrefs = localStorage.getItem("novabrief_preferences");
       if (savedPrefs) {
         try {
           const parsed = JSON.parse(savedPrefs);

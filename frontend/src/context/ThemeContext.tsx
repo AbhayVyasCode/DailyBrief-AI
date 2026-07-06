@@ -11,31 +11,21 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    // Check local storage or system preference
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('newsflow_theme') as Theme;
-      if (savedTheme) return savedTheme;
-
-      // Force default to dark as per request, ignoring system pref for first visit
-      return 'dark'; 
-    }
-    return 'dark';
-  });
+  const [theme] = useState<Theme>('light');
 
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
-    localStorage.setItem('newsflow_theme', theme);
-  }, [theme]);
+    root.classList.remove('dark');
+    root.classList.add('light');
+    localStorage.setItem('novabrief_theme', 'light');
+  }, []);
 
   const toggleTheme = () => {
-    setThemeState((prev) => (prev === 'light' ? 'dark' : 'light'));
+    // Discarded dark theme option, stays light
   };
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
+  const setTheme = () => {
+    // Discarded dark theme option, stays light
   };
 
   return (

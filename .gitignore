@@ -7,7 +7,9 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
-
+.tempimage
+.agents
+agent
 # IDEs
 .vscode/
 .idea/

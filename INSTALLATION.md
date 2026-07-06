@@ -143,7 +143,7 @@ curl http://localhost:8000/api/v1/news/videos/trending
 
 ### Test Frontend
 1. Open browser to `http://localhost:5173`
-2. Should see NewsFlow homepage
+2. Should see NovaBrief homepage
 3. Navigate to "Hindi" - should show Hindi news
 4. Navigate to "Videos" - should show YouTube videos
 5. Navigate to "AI Tools" - should work for summarization

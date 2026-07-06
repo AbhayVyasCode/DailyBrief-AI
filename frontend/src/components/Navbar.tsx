@@ -1,13 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Newspaper, TrendingUp, Settings, Search, Video, Sparkles, Home, Sun, Moon } from 'lucide-react';
+import { Newspaper, TrendingUp, Settings, Search, Video, Sparkles, Home } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { useTheme } from '../context/ThemeContext';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 
 const Navbar = () => {
   const location = useLocation();
-  const { theme, toggleTheme } = useTheme();
 
   const links = [
     { href: '/', label: 'Home', icon: Home },
@@ -31,7 +29,7 @@ const Navbar = () => {
             >
               <Newspaper className="w-8 h-8" />
             </motion.div>
-            <span className="hidden md:inline">NewsFlow</span>
+            <span className="hidden md:inline">NovaBrief</span>
           </Link>
 
           <div className="flex items-center gap-4">
@@ -66,14 +64,6 @@ const Navbar = () => {
             </div>
 
             <div className="pl-4 border-l border-border hidden md:flex items-center gap-4">
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
-                aria-label="Toggle theme"
-              >
-                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-
               <SignedIn>
                 <UserButton afterSignOutUrl="/" />
               </SignedIn>

@@ -7,7 +7,7 @@
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Click on the project dropdown at the top
 3. Click "New Project"
-4. Enter project name: "NewsFlow" (or any name)
+4. Enter project name: "NovaBrief" (or any name)
 5. Click "Create"
 
 ### Step 2: Enable YouTube Data API v3

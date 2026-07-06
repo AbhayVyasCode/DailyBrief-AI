@@ -1,45 +1,49 @@
-import { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Sphere, MeshDistortMaterial } from '@react-three/drei';
-
-const AnimatedSphere = () => {
-  const meshRef = useRef<any>(null);
-
-  useFrame((state) => {
-    if (meshRef.current) {
-        meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.2;
-        meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.3;
-    }
-  });
-
-  return (
-    <Sphere args={[1, 100, 200]} scale={2.4} ref={meshRef}>
-      <MeshDistortMaterial
-        color="#8b5cf6" 
-        attach="material"
-        distort={0.4}
-        speed={1.5}
-        roughness={0.2}
-        metalness={0.8}
-      />
-    </Sphere>
-  );
-};
-
 const Hero3D = () => {
   return (
-    <div className="absolute top-0 left-0 w-full h-full z-0 opacity-50 pointer-events-none overflow-hidden">
-       {/* Use a separate canvas or overlay if needed, but for hero section styling, 
-           we usually want it confined. 
-           However, given the previous requirement, let's make it a small animated element 
-           that sits BEHIND the text or next to it.
-           For now, let's make it fill the container provided to it.
-       */}
-      <Canvas camera={{ position: [0, 0, 5] }}>
-        <ambientLight intensity={1} />
-        <directionalLight position={[10, 10, 5]} intensity={2} />
-        <AnimatedSphere />
-      </Canvas>
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+      {/* Morphing Liquid Sphere */}
+      <div className="relative w-72 h-72 lg:w-80 lg:h-80">
+        {/* Outer glowing halo */}
+        <div 
+          className="absolute inset-[-20px] bg-primary/25 dark:bg-primary/10 rounded-full blur-3xl animate-pulse" 
+          style={{ animationDuration: '4s' }} 
+        />
+        
+        {/* Hardware accelerated CSS morphing shape */}
+        <div 
+          className="w-full h-full bg-gradient-to-tr from-primary via-indigo-500 to-purple-600 opacity-80 dark:opacity-75 shadow-2xl"
+          style={{
+            willChange: 'border-radius, transform',
+            animation: 'morph 12s ease-in-out infinite, spin 20s linear infinite',
+          }}
+        />
+      </div>
+      
+      {/* Morphing Keyframe Styles injected directly */}
+      <style>{`
+        @keyframes morph {
+          0% {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+          }
+          50% {
+            border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+          }
+          100% {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+          }
+        }
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg) scale(1);
+          }
+          50% {
+            transform: rotate(180deg) scale(1.05);
+          }
+          100% {
+            transform: rotate(360deg) scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 };

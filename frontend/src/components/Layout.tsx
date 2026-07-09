@@ -14,10 +14,10 @@ const Layout = ({ children }: LayoutProps) => {
   const isHomePage = location.pathname === '/';
 
   return (
-    <div id="app-root" className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20">
+    <div id="app-root" className="bg-background text-foreground font-sans selection:bg-primary/20">
       {!isHomePage && <ThreeBackground />}
       {!isHomePage && <Navbar />}
-      <main className={isHomePage ? "w-full min-h-screen relative z-10" : "container mx-auto px-4 pb-24 pt-8 md:pt-24 md:pb-8 relative z-10"}>
+      <main className={isHomePage ? "w-full relative z-10" : "container mx-auto px-4 pb-24 pt-20 md:pt-24 md:pb-8 relative z-10"}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

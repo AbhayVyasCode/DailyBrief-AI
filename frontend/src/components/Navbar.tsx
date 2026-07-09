@@ -1,84 +1,92 @@
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Newspaper, TrendingUp, Settings, Search, Video, Sparkles, Home } from 'lucide-react';
-import { cn } from '../lib/utils';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+
+const navLinks = [
+  { href: '/', label: 'Home', icon: Home },
+  { href: '/feed', label: 'Feed', icon: Newspaper },
+  { href: '/trends', label: 'Trends', icon: TrendingUp },
+  { href: '/videos', label: 'Videos', icon: Video },
+  { href: '/tools', label: 'AI Tools', icon: Sparkles },
+  { href: '/search', label: 'Search', icon: Search },
+  { href: '/settings', label: 'Settings', icon: Settings },
+];
 
 const Navbar = () => {
   const location = useLocation();
 
-  const links = [
-    { href: '/', label: 'Home', icon: Home },
-    { href: '/feed', label: 'Feed', icon: Newspaper },
-    { href: '/trends', label: 'Trends', icon: TrendingUp },
-    { href: '/videos', label: 'Videos', icon: Video },
-    { href: '/tools', label: 'AI Tools', icon: Sparkles },
-    { href: '/search', label: 'Search', icon: Search },
-    { href: '/settings', label: 'Settings', icon: Settings },
-  ];
-
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-t border-border md:top-0 md:bottom-auto md:border-b md:border-t-0">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2 font-bold text-xl text-primary">
-            <motion.div
-              initial={{ rotate: -10, scale: 0.9 }}
-              animate={{ rotate: 0, scale: 1 }}
-              transition={{ duration: 0.5, type: "spring" }}
-            >
-              <Newspaper className="w-8 h-8" />
-            </motion.div>
-            <span className="hidden md:inline">NovaBrief</span>
-          </Link>
+    <motion.header
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200/50"
+    >
+      <div className="max-w-[1200px] mx-auto px-4 md:px-0 h-[72px] flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <motion.div
+            whileHover={{ rotate: -5, scale: 1.05 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            className="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-black/10"
+          >
+            <img src="/features/DailyBrief AI icon.jpg" alt="DailyBrief AI" className="w-full h-full object-cover" />
+          </motion.div>
+          <span className="font-extrabold text-xl text-[#0b132b] tracking-tight">DailyBrief AI</span>
+        </Link>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 md:gap-2 lg:gap-4 overflow-x-auto no-scrollbar">
-              {links.map((link) => {
-                const Icon = link.icon;
-                const isActive = location.pathname === link.href;
+        {/* Center Navigation */}
+        <nav className="hidden lg:flex items-center gap-1 bg-white/50 backdrop-blur-md rounded-full px-2 py-1.5 border border-gray-200/50 shadow-sm">
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const isActive = location.pathname === link.href;
 
-                return (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className={cn(
-                      "relative px-3 md:px-4 py-2 rounded-full flex items-center gap-2 transition-colors shrink-0",
-                      isActive ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    {isActive && (
-                      <motion.div
-                        layoutId="navbar-indicator"
-                        className="absolute inset-0 bg-primary rounded-full"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                      />
-                    )}
-                    <span className="relative z-10 flex items-center gap-2">
-                      <Icon className="w-5 h-5" />
-                      <span className="hidden md:inline font-medium text-special">{link.label}</span>
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
+            return (
+              <Link
+                key={link.href}
+                to={link.href}
+                className={`relative px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all duration-300 ${
+                  isActive
+                    ? 'text-white'
+                    : 'text-gray-600 hover:text-[#4255d4] hover:bg-white/80'
+                }`}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="header-nav-indicator"
+                    className="absolute inset-0 bg-gradient-to-r from-[#4255d4] to-[#6366f1] rounded-full"
+                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                  <Icon className="w-4 h-4" />
+                  <span className="hidden xl:inline">{link.label}</span>
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
 
-            <div className="pl-4 border-l border-border hidden md:flex items-center gap-4">
-              <SignedIn>
-                <UserButton afterSignOutUrl="/" />
-              </SignedIn>
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="px-4 py-2 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors">
-                    Sign In
-                  </button>
-                </SignInButton>
-              </SignedOut>
-            </div>
-          </div>
+        {/* Action Button */}
+        <div className="flex items-center gap-3">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-5 py-2.5 rounded-full bg-[#0b132b] text-white font-semibold text-sm hover:bg-[#1e293b] transition-colors shadow-lg shadow-[#0b132b]/10 cursor-pointer"
+              >
+                Sign In
+              </motion.button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </div>
-    </nav>
+    </motion.header>
   );
 };
 

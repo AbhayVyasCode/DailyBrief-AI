@@ -1,42 +1,39 @@
 import { useState, useEffect } from 'react';
 import NewsCard from '../components/NewsCard';
-import SearchBar from '../components/SearchBar';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, RefreshCw, Zap } from 'lucide-react';
+import { Loader2, RefreshCw, Zap, Search, ArrowRight } from 'lucide-react';
 import { newsApi } from '../services/api';
 import type { NewsItem } from '../services/types';
-import Hero3D from '../components/Hero3D';
 
 const Feed = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [query, setQuery] = useState('');
 
-  const fetchNews = async (query?: string) => {
+  const fetchNews = async (search?: string) => {
     setLoading(true);
     setError(null);
     try {
-      let categories: string[] = [];
-      
-      const savedPrefs = localStorage.getItem("novabrief_preferences");
+      let categories: string[] = ['Technology', 'World'];
+      const savedPrefs = localStorage.getItem('dailybrief_preferences');
       if (savedPrefs) {
         try {
           const parsed = JSON.parse(savedPrefs);
-          if (parsed.categories && Array.isArray(parsed.categories)) {
+          if (parsed.categories && Array.isArray(parsed.categories) && parsed.categories.length > 0) {
             categories = parsed.categories;
           }
         } catch (e) {
-          console.error("Failed to parse preferences", e);
+          console.error('Failed to parse preferences', e);
         }
       }
 
-      if (query) {
-        const response = await newsApi.searchNews(query);
+      if (search) {
+        const response = await newsApi.searchNews(search);
         setNews(response.news);
       } else {
-        // If categories is empty, backend will now handle it as "All" (or we pass explicit ["All"] if needed, but empty list is standard for "no filter")
-        const response = await newsApi.getFeed(categories.length > 0 ? categories : []); 
+        const response = await newsApi.getFeed(categories);
         setNews(response.news);
       }
     } catch (err) {
@@ -51,145 +48,167 @@ const Feed = () => {
     fetchNews();
   }, []);
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    fetchNews(query);
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      setSearchQuery(query);
+      fetchNews(query);
+    }
   };
 
   const handleRefresh = () => {
     fetchNews(searchQuery || undefined);
   };
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: 'spring' as const,
-        stiffness: 100,
-        damping: 10
-      }
-    }
-  };
-
   return (
-    <div className="space-y-8 pb-10">
-      <header className="relative space-y-4 text-center max-w-4xl mx-auto mb-12 pt-16 pb-8">
-        {/* 3D Content Background for Header */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] opacity-30 pointer-events-none z-0">
-             <Hero3D />
-        </div>
+    <div className="min-h-screen">
+      {/* Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[#f8f9fa]" />
+        <div
+          className="absolute inset-0 opacity-[0.3]"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.06) 0.8px, transparent 0.8px)',
+            backgroundSize: '28px 28px',
+          }}
+        />
+        <div className="absolute top-[10%] left-[-5%] w-[500px] h-[500px] bg-gradient-to-br from-blue-500/[0.04] to-indigo-500/[0.03] rounded-full blur-[80px]" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-gradient-to-tl from-purple-500/[0.04] to-pink-500/[0.02] rounded-full blur-[80px]" />
+      </div>
 
-        <div className="relative z-10">
-            <motion.div
+      <div className="relative z-10 space-y-8">
+        {/* Header */}
+        <header className="relative text-center max-w-3xl mx-auto pt-20 pb-10">
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary font-medium text-sm mb-4"
-            >
-            <Zap className="w-4 h-4 fill-primary" />
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#4255d4]/10 text-[#4255d4] font-medium text-sm mb-6"
+          >
+            <Zap className="w-4 h-4" />
             <span>Live AI News Feed</span>
-            </motion.div>
-            
-            <motion.h1 
+          </motion.div>
+
+          <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-7xl font-bold tracking-tight text-special mb-6"
-            >
-            Discover the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">Extraordinary</span>
-            </motion.h1>
-            
-            <motion.p 
+            className="text-4xl md:text-6xl font-black tracking-tight text-[#0f172a] mb-4"
+          >
+            Discover the{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4255d4] via-[#6366f1] to-[#a855f7]">
+              Extraordinary
+            </span>
+          </motion.h1>
+
+          <motion.p
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto"
-            >
-            {searchQuery ? `Showing results for "${searchQuery}"` : 'AI-curated insights from the world\'s most trusted sources.'}
-            </motion.p>
-        </div>
-      </header>
-
-      <div className="max-w-3xl mx-auto sticky top-4 z-20 backdrop-blur-xl bg-background/50 p-2 rounded-2xl border border-white/10 shadow-lg">
-        <div className="flex items-center gap-2">
-          <div className="flex-1">
-            <SearchBar onSearch={handleSearch} />
-          </div>
-          <motion.button
-            whileHover={{ scale: 1.05, rotate: 180 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.3 }}
-            onClick={handleRefresh}
-            disabled={loading}
-            className="p-3 bg-secondary/80 hover:bg-secondary rounded-xl transition-colors disabled:opacity-50 text-foreground"
+            className="text-gray-400 text-base md:text-lg max-w-xl mx-auto"
           >
-            <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-          </motion.button>
-        </div>
-      </div>
+            {searchQuery
+              ? `Showing results for "${searchQuery}"`
+              : "AI-curated insights from the world's most trusted sources."}
+          </motion.p>
+        </header>
 
-      {loading && (
-        <div className="flex flex-col items-center justify-center py-32 gap-6">
-          <div className="relative">
-            <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse"></div>
-            <Loader2 className="w-12 h-12 animate-spin text-primary relative z-10" />
-          </div>
-          <p className="text-muted-foreground animate-pulse text-lg font-medium">Curating your feed...</p>
-        </div>
-      )}
-
-      {error && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center py-20 px-4"
+        {/* Search Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="max-w-2xl mx-auto sticky top-20 z-20"
         >
-          <div className="bg-destructive/10 text-destructive p-6 rounded-2xl max-w-md mx-auto border border-destructive/20 backdrop-blur-sm">
-            <p className="font-semibold text-lg mb-2">Something went wrong</p>
-            <p className="mb-6 opacity-90">{error}</p>
-            <button 
-              onClick={handleRefresh}
-              className="px-6 py-2.5 bg-destructive text-destructive-foreground rounded-lg font-medium hover:bg-destructive/90 transition-colors shadow-lg shadow-destructive/20"
+          <form onSubmit={handleSearch} className="flex items-center gap-2">
+            <div className="flex-1 relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-[#4255d4] transition-colors" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search for news topics..."
+                className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#4255d4]/20 focus:border-[#4255d4] transition-all text-sm"
+              />
+            </div>
+            <motion.button
+              type="submit"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-6 py-3.5 bg-[#0f172a] hover:bg-[#1e293b] text-white font-semibold text-sm rounded-xl transition-colors flex items-center gap-2"
             >
-              Try Again
-            </button>
+              <Search className="w-4 h-4" />
+              Search
+            </motion.button>
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.05, rotate: 180 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleRefresh}
+              disabled={loading}
+              className="p-3.5 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-colors disabled:opacity-50 text-gray-500"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </motion.button>
+          </form>
+        </motion.div>
+
+        {/* Loading State */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-24 gap-5">
+            <div className="relative">
+              <div className="absolute inset-0 bg-[#4255d4]/20 blur-xl rounded-full animate-pulse" />
+              <Loader2 className="w-10 h-10 animate-spin text-[#4255d4] relative z-10" />
+            </div>
+            <p className="text-gray-400 animate-pulse text-sm font-medium">Curating your feed...</p>
           </div>
-        </motion.div>
-      )}
+        )}
 
-      {!loading && !error && news.length === 0 && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-32"
-        >
-          <p className="text-muted-foreground text-xl">No stories found. Try exploring a different topic.</p>
-        </motion.div>
-      )}
+        {/* Error State */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-16"
+          >
+            <div className="bg-red-50 text-red-600 p-6 rounded-2xl max-w-md mx-auto border border-red-100">
+              <p className="font-semibold text-lg mb-2">Something went wrong</p>
+              <p className="mb-5 opacity-80 text-sm">{error}</p>
+              <button
+                onClick={handleRefresh}
+                className="px-6 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors shadow-lg"
+              >
+                Try Again
+              </button>
+            </div>
+          </motion.div>
+        )}
 
-      {!loading && !error && news.length > 0 && (
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-2"
-        >
-          <AnimatePresence mode="popLayout">
+        {/* Empty State */}
+        {!loading && !error && news.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-24"
+          >
+            <p className="text-gray-400 text-lg">No stories found. Try exploring a different topic.</p>
+          </motion.div>
+        )}
+
+        {/* News Grid */}
+        {!loading && !error && news.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-2"
+          >
             {news.map((item, index) => (
-              <motion.div key={item.id} variants={itemVariants} layout>
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
                 <NewsCard
                   index={index}
                   title={item.title}
@@ -204,12 +223,11 @@ const Feed = () => {
                 />
               </motion.div>
             ))}
-          </AnimatePresence>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 };
-
 
 export default Feed;

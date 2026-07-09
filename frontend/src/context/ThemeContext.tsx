@@ -17,7 +17,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const root = window.document.documentElement;
     root.classList.remove('dark');
     root.classList.add('light');
-    localStorage.setItem('novabrief_theme', 'light');
+    localStorage.setItem('dailybrief_theme', 'light');
   }, []);
 
   const toggleTheme = () => {

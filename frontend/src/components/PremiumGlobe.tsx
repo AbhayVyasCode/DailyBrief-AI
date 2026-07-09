@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import createGlobe from 'cobe';
 import type { Marker } from 'cobe';
 import { cn } from '../lib/utils';
@@ -80,12 +80,7 @@ const PremiumGlobe = ({ className, markers = [], onRegionChange, onPhiChange }: 
   }, [onRegionChange, onPhiChange]);
 
   return (
-    <div
-      className={cn(
-        'flex items-center justify-center z-10 w-full h-full',
-        className
-      )}
-    >
+    <div className={cn('flex items-center justify-center z-10 w-full h-full', className)}>
       <div className="relative w-full max-w-[460px] aspect-square">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-[300px] h-[300px] rounded-full bg-[#4255d4]/10 blur-[60px]" />

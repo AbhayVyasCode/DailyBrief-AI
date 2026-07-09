@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
-import { ArrowRight, Zap, Volume2, Languages, Play, Bot, Newspaper, TrendingUp, Settings, Search, Video, Sparkles, Home as HomeIcon, FileText } from 'lucide-react';
+import { ArrowRight, Zap, Volume2, Languages, Play, Bot, Newspaper, TrendingUp, Settings, Search, Video, Sparkles, Home as HomeIcon, FileText, BookOpen } from 'lucide-react';
 import LogoWall from '../components/LogoWall';
+import FeatureShowcase from '../components/FeatureShowcase';
+import CTABackground from '../components/CTABackground';
+import Footer from '../components/Footer';
 import dashboardMockup from '../assets/novabrief_dashboard_mockup.png';
-import chatMockup from '../assets/novabrief_ai_chat_mockup.png';
 import PremiumGlobe from '../components/PremiumGlobe';
 import type { Marker } from 'cobe';
 
@@ -16,9 +18,9 @@ const regions = [
     flag: '🇺🇸',
     longitude: -75,
     sources: [
-      { name: 'The New York Times', region: 'US Desk', stats: '130M+ Readers', color: '#0f172a', flag: '🇺🇸', lat: 40.7128, lon: -74.006 },
-      { name: 'CNN', region: 'Cable News', stats: '95M+ Viewers', color: '#cc0000', flag: '🇺🇸', lat: 33.749, lon: -84.388 },
-      { name: 'O Globo', region: 'Brazil', stats: '25M+ Readers', color: '#1e40af', flag: '🇧🇷', lat: -22.9068, lon: -43.1729 }
+      { name: 'The New York Times', region: 'US Desk', stats: '130M+ Readers', color: '#0f172a', flag: '🇺🇸', lat: 40.7128, lon: -74.006, logo: 'https://cdn.brandfetch.io/ida5pjO05F/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1667566812797' },
+      { name: 'CNN', region: 'Cable News', stats: '95M+ Viewers', color: '#cc0000', flag: '🇺🇸', lat: 33.749, lon: -84.388, logo: 'https://cdn.brandfetch.io/idhidc5593/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1721816108390' },
+      { name: 'O Globo', region: 'Brazil', stats: '25M+ Readers', color: '#1e40af', flag: '🇧🇷', lat: -22.9068, lon: -43.1729, logo: 'https://cdn.brandfetch.io/idnDVRGJl3/w/320/h/320/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1781755677905' }
     ]
   },
   {
@@ -27,9 +29,9 @@ const regions = [
     flag: '🇪🇺',
     longitude: 15,
     sources: [
-      { name: 'BBC News', region: 'UK Desk', stats: '100M+ Readers', color: '#bb1919', flag: '🇬🇧', lat: 51.5074, lon: -0.1278 },
-      { name: 'Le Monde', region: 'France', stats: '15M+ Readers', color: '#111827', flag: '🇫🇷', lat: 48.8566, lon: 2.3522 },
-      { name: 'Der Spiegel', region: 'Germany', stats: '12M+ Readers', color: '#e50000', flag: '🇩🇪', lat: 53.5511, lon: 9.9937 }
+      { name: 'BBC News', region: 'UK Desk', stats: '100M+ Readers', color: '#bb1919', flag: '🇬🇧', lat: 51.5074, lon: -0.1278, logo: 'https://cdn.brandfetch.io/idNQsCsD6X/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1777662657597' },
+      { name: 'Le Monde', region: 'France', stats: '15M+ Readers', color: '#111827', flag: '🇫🇷', lat: 48.8566, lon: 2.3522, logo: 'https://cdn.brandfetch.io/idRhM8sw7p/w/1080/h/1080/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1778152535542' },
+      { name: 'Der Spiegel', region: 'Germany', stats: '12M+ Readers', color: '#e50000', flag: '🇩🇪', lat: 53.5511, lon: 9.9937, logo: 'https://cdn.brandfetch.io/idBp3yFRhE/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1781719367200' }
     ]
   },
   {
@@ -38,9 +40,9 @@ const regions = [
     flag: '🇦🇪',
     longitude: 40,
     sources: [
-      { name: 'Al Jazeera', region: 'Qatar', stats: '80M+ Readers', color: '#d97706', flag: '🇶🇦', lat: 25.2854, lon: 51.5310 },
-      { name: 'Sky News Arabia', region: 'UAE Desk', stats: '30M+ Viewers', color: '#0284c7', flag: '🇦🇪', lat: 25.2048, lon: 55.2708 },
-      { name: 'Mail & Guardian', region: 'S. Africa', stats: '5M+ Readers', color: '#16a34a', flag: '🇿🇦', lat: -33.9249, lon: 18.4241 }
+      { name: 'Al Jazeera', region: 'Qatar', stats: '80M+ Readers', color: '#d97706', flag: '🇶🇦', lat: 25.2854, lon: 51.5310, logo: 'https://cdn.brandfetch.io/idF4kPeaPe/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1781716269866' },
+      { name: 'Sky News Arabia', region: 'UAE Desk', stats: '30M+ Viewers', color: '#0284c7', flag: '🇦🇪', lat: 25.2048, lon: 55.2708, logo: 'https://cdn.brandfetch.io/id6Mq6uhOk/w/300/h/300/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1773058403989' },
+      { name: 'Mail & Guardian', region: 'S. Africa', stats: '5M+ Readers', color: '#16a34a', flag: '🇿🇦', lat: -33.9249, lon: 18.4241, logo: 'https://cdn.brandfetch.io/id-O8jA71n/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1781824876085' }
     ]
   },
   {
@@ -49,15 +51,14 @@ const regions = [
     flag: '🇯🇵',
     longitude: 105,
     sources: [
-      { name: 'The Yomiuri Shimbun', region: 'Japan', stats: '10M+ Circ.', color: '#8b5cf6', flag: '🇯🇵', lat: 35.6762, lon: 139.6503 },
-      { name: 'NDTV', region: 'India', stats: '50M+ Viewers', color: '#dc2626', flag: '🇮🇳', lat: 28.6139, lon: 77.2090 },
-      { name: 'SCMP', region: 'Hong Kong', stats: '18M+ Readers', color: '#005a9c', flag: '🇭🇰', lat: 22.3193, lon: 114.1694 }
+      { name: 'News On Japan', region: 'Japan', stats: '10M+ Circ.', color: '#8b5cf6', flag: '🇯🇵', lat: 35.6762, lon: 139.6503, logo: 'https://cdn.brandfetch.io/idjVI7H1i0/w/400/h/400/theme/dark/icon.png?c=1bxid64Mup7aczewSAYMX&t=1781860922342' },
+      { name: 'NDTV', region: 'India', stats: '50M+ Viewers', color: '#dc2626', flag: '🇮🇳', lat: 28.6139, lon: 77.2090, logo: 'https://cdn.brandfetch.io/idCIBdadOR/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1774321079668' },
+      { name: 'SCMP', region: 'Hong Kong', stats: '18M+ Readers', color: '#005a9c', flag: '🇭🇰', lat: 22.3193, lon: 114.1694, logo: 'https://cdn.brandfetch.io/idqyZMY8gD/w/192/h/192/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1781717765813' }
     ]
   }
 ];
 
 const Home = () => {
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [activeRegion, setActiveRegion] = useState(regions[0]);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const location = useLocation();
@@ -72,7 +73,7 @@ const Home = () => {
     { href: '/settings', label: 'Settings', icon: Settings },
   ];
 
-  // Build markers for cobe with IDs matching source indices
+  // Globe markers (stick to globe surface via cobe)
   const globeMarkers: Marker[] = activeRegion.sources.map((source, i) => ({
     location: [source.lat, source.lon] as [number, number],
     size: 0.06,
@@ -138,11 +139,11 @@ const Home = () => {
             <motion.div 
               whileHover={{ rotate: -5, scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="w-10 h-10 bg-gradient-to-br from-[#4255d4] to-[#6366f1] rounded-xl flex items-center justify-center shadow-lg shadow-[#4255d4]/20"
+              className="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-black/10"
             >
-              <span className="text-white font-extrabold text-xl tracking-tighter">N</span>
+              <img src="/features/DailyBrief AI icon.jpg" alt="DailyBrief AI" className="w-full h-full object-cover" />
             </motion.div>
-            <span className="font-extrabold text-xl text-[#0b132b] tracking-tight">NovaBrief</span>
+            <span className="font-extrabold text-xl text-[#0b132b] tracking-tight">DailyBrief AI</span>
           </Link>
 
           {/* Center Navigation */}
@@ -373,7 +374,7 @@ const Home = () => {
               <div className="w-full h-full bg-[#111] rounded-xl overflow-hidden flex items-center justify-center p-[1px]">
                 <img
                   src={dashboardMockup}
-                  alt="NovaBrief Reader Dashboard Mockup"
+                  alt="DailyBrief AI Reader Dashboard Mockup"
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover rounded-[10px]"
@@ -411,283 +412,396 @@ const Home = () => {
       {/* Credibility / Logo Wall */}
       <LogoWall />
 
-      {/* Bento Grid Features Section */}
-      <section className="relative z-10 w-full max-w-[1200px] mx-auto px-4 md:px-0 py-32 space-y-20">
-        <div className="max-w-[800px] space-y-4">
-          <span className="px-4 py-1.5 rounded-full bg-[#4255d4]/10 text-[#4255d4] font-mono text-[10.5px] uppercase tracking-[0.2em] font-bold border border-[#4255d4]/20">
-            Intelligent Features
-          </span>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight text-[#0f172a] uppercase font-sans">
-            A smarter way to consume the news.
-          </h2>
-          <p className="text-gray-600 text-lg max-w-2xl leading-relaxed">
-            NovaBrief packages full article scraping, text-to-speech, translation, and video curation into a single responsive, hardware-accelerated grid system.
-          </p>
-        </div>
+      {/* Intelligent Features — Scroll-Pinned Showcase */}
+      <FeatureShowcase />
 
-        <motion.div 
-          variants={revealContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
-        >
-          {/* Card 1: Summaries (Col Span 2) */}
+      {/* How It Works — Premium Animated */}
+      <section className="relative z-10 border-t border-gray-200/50 py-28 overflow-hidden">
+        {/* Animated gradient mesh background */}
+        <motion.div
+          animate={{ x: [0, 30, -20, 0], y: [0, -20, 15, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/[0.04] rounded-full blur-[100px] pointer-events-none"
+        />
+        <motion.div
+          animate={{ x: [0, -25, 20, 0], y: [0, 15, -25, 0] }}
+          transition={{ duration: 30, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute bottom-[10%] right-[-5%] w-[450px] h-[450px] bg-purple-500/[0.04] rounded-full blur-[100px] pointer-events-none"
+        />
+
+        {/* Floating particles */}
+        {[...Array(6)].map((_, i) => (
           <motion.div
-            variants={revealItem}
-            className="lg:col-span-2 relative p-[1px] rounded-3xl bg-transparent overflow-visible flex group"
-          >
+            key={i}
+            animate={{
+              y: [0, -30 - i * 10, 0],
+              x: [0, (i % 2 === 0 ? 15 : -15), 0],
+              opacity: [0.15, 0.3, 0.15],
+            }}
+            transition={{
+              duration: 6 + i * 2,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: i * 0.8,
+            }}
+            className="absolute w-1.5 h-1.5 rounded-full bg-[#4255d4]/30 pointer-events-none"
+            style={{
+              left: `${15 + i * 14}%`,
+              top: `${20 + (i % 3) * 25}%`,
+            }}
+          />
+        ))}
 
-            <div className="w-full h-full bg-white/60 backdrop-blur-md rounded-3xl border border-gray-200/50 p-8 flex flex-col justify-between space-y-8 shadow-sm hover:shadow-md hover:border-[#4255d4]/30 transition-all duration-300 relative z-10">
-              <div className="space-y-4">
-                <div className="w-11 h-11 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600">
-                  <Zap className="w-5.5 h-5.5 fill-blue-600/10" />
-                </div>
-                <h3 className="text-2xl font-extrabold text-[#0f172a]">Instant AI Summaries</h3>
-                <p className="text-gray-500 text-sm max-w-xl leading-relaxed">
-                  Scrapes the main text of any article, stripping advertisements, paywalls, and script noise. Gemini AI delivers structured briefings in under 300 words.
-                </p>
-              </div>
+        {/* Background grid dots */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.25]"
+          style={{
+            backgroundImage: 'radial-gradient(circle, #c4c9d4 0.7px, transparent 0.7px)',
+            backgroundSize: '24px 24px',
+          }}
+        />
 
-              {/* Custom Split-Pane Mockup */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full pt-2">
-                {/* Original Article block */}
-                <div className="bg-gray-50/70 border border-gray-200/30 rounded-2xl p-5 space-y-3">
-                  <div className="flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                    <span>Source Document</span>
-                    <span>4,820 Words</span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-3 bg-gray-200/60 rounded-full w-full" />
-                    <div className="h-3 bg-gray-200/60 rounded-full w-5/6" />
-                    <div className="h-3 bg-gray-200/60 rounded-full w-11/12" />
-                    <div className="h-3 bg-gray-200/40 rounded-full w-3/4" />
-                  </div>
-                </div>
-
-                {/* AI Executive Summary block */}
-                <div className="bg-blue-500/5 border border-blue-500/10 rounded-2xl p-5 space-y-3">
-                  <div className="flex justify-between items-center text-[10px] font-bold text-blue-500 uppercase tracking-wider">
-                    <span>Gemini Curation</span>
-                    <span>240 Words</span>
-                  </div>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-xs font-semibold text-gray-700">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                      Efficiency benchmark yields 40% speedup.
-                    </li>
-                    <li className="flex items-center gap-2 text-xs font-semibold text-gray-700">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                      Baseline transformer parameters intact.
-                    </li>
-                    <li className="flex items-center gap-2 text-xs font-semibold text-gray-700">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                      Training latency significantly decreased.
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Card 2: Translation (Col Span 1) */}
+        <div className="w-full max-w-[1000px] mx-auto px-5 md:px-8 relative">
+          {/* Header */}
           <motion.div
-            variants={revealItem}
-            className="lg:col-span-1 relative p-[1px] rounded-3xl bg-transparent overflow-visible flex group"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="text-center mb-16"
           >
-
-            <div className="w-full h-full bg-white/60 backdrop-blur-md rounded-3xl border border-gray-200/50 p-8 flex flex-col justify-between space-y-8 shadow-sm hover:shadow-md hover:border-purple-500/30 transition-all duration-300 relative z-10">
-              <div className="space-y-4">
-                <div className="w-11 h-11 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-500">
-                  <Languages className="w-5.5 h-5.5" />
-                </div>
-                <h3 className="text-2xl font-extrabold text-[#0f172a]">Neural Translation</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  Translate summarized updates seamlessly between English and Hindi, preserving context, tone, and formatting in high-contrast layouts.
-                </p>
-              </div>
-
-              {/* Translation bubbles mockup */}
-              <div className="flex flex-col gap-3 w-full pt-2">
-                {/* English bubble */}
-                <div className="self-start max-w-[85%] bg-gray-50/80 border border-gray-200/40 p-3.5 rounded-2xl rounded-tl-sm space-y-1">
-                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">English</span>
-                  <p className="text-xs font-semibold text-gray-700">AI research groups validate transformer architectural gains.</p>
-                </div>
-                {/* Hindi bubble */}
-                <div className="self-end max-w-[85%] bg-purple-500/10 border border-purple-500/20 p-3.5 rounded-2xl rounded-tr-sm space-y-1">
-                  <span className="text-[9px] font-bold text-purple-500 uppercase tracking-wider block text-right">हिन्दी</span>
-                  <p className="text-xs font-semibold text-purple-900 text-right leading-relaxed">अनुसंधान समूहों ने ट्रांसफार्मर संरचनात्मक लाभों को सत्यापित किया।</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Card 3: Audio TTS (Col Span 1) */}
-          <motion.div
-            variants={revealItem}
-            className="lg:col-span-1 relative p-[1px] rounded-3xl bg-transparent overflow-visible flex group"
-          >
-
-            <div className="w-full h-full bg-white/60 backdrop-blur-md rounded-3xl border border-gray-200/50 p-8 flex flex-col justify-between space-y-8 shadow-sm hover:shadow-md hover:border-orange-500/30 transition-all duration-300 relative z-10">
-              <div className="space-y-4">
-                <div className="w-11 h-11 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-500">
-                  <Volume2 className="w-5.5 h-5.5" />
-                </div>
-                <h3 className="text-2xl font-extrabold text-[#0f172a]">Text-to-Speech</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  Listen to news cards or custom text blocks with integrated natural text-to-speech engine, generated dynamically to support eyes-free productivity.
-                </p>
-              </div>
-
-              {/* Waveform Player widget */}
-              <div className="bg-gray-50/70 border border-gray-200/40 rounded-2xl p-4.5 flex items-center justify-between gap-4 w-full pt-2">
-                <button 
-                  onClick={() => setIsAudioPlaying(!isAudioPlaying)}
-                  className="w-11 h-11 rounded-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center cursor-pointer transition-colors shadow-md shadow-orange-500/20 flex-shrink-0"
-                >
-                  {isAudioPlaying ? (
-                    <div className="flex gap-0.5 items-center justify-center w-5 h-5">
-                      <span className="w-0.5 h-3 bg-current animate-pulse" />
-                      <span className="w-0.5 h-4 bg-current animate-pulse" />
-                      <span className="w-0.5 h-2 bg-current animate-pulse" />
-                    </div>
-                  ) : (
-                    <Play className="w-5 h-5 fill-current ml-0.5" />
-                  )}
-                </button>
-
-                <div className="flex-1 space-y-1.5">
-                  <div className="flex justify-between items-center text-[9px] font-bold text-gray-400 uppercase tracking-wider">
-                    <span>{isAudioPlaying ? 'Streaming Audio' : 'Text to Speech'}</span>
-                    <span>0:18</span>
-                  </div>
-                  {/* Waveform visualization */}
-                  <div className="h-8 flex items-end gap-[3px] overflow-hidden">
-                    {[12, 28, 16, 32, 24, 8, 36, 20, 28, 14, 26, 10, 32, 18, 22, 12].map((height, i) => (
-                      <div
-                        key={i}
-                        className={`flex-1 rounded-full ${isAudioPlaying ? 'bg-orange-500' : 'bg-gray-300'}`}
-                        style={{ height: `${height}%` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Card 4: Video Curation (Col Span 2) */}
-          <motion.div
-            variants={revealItem}
-            className="lg:col-span-2 relative p-[1px] rounded-3xl bg-transparent overflow-visible flex group"
-          >
-
-            <div className="w-full h-full bg-white/60 backdrop-blur-md rounded-3xl border border-gray-200/50 p-8 flex flex-col justify-between space-y-8 shadow-sm hover:shadow-md hover:border-red-500/30 transition-all duration-300 relative z-10">
-              <div className="space-y-4">
-                <div className="w-11 h-11 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500">
-                  <Play className="w-5.5 h-5.5 fill-red-500/10" />
-                </div>
-                <h3 className="text-2xl font-extrabold text-[#0f172a]">Get instant and related news videos</h3>
-                <p className="text-gray-500 text-sm max-w-xl leading-relaxed">
-                  Pulls relevant HD broadcast updates uploaded in the last 7 days. Video lists are sorted dynamically by view counts to display the most trending briefs first.
-                </p>
-              </div>
-
-              {/* Custom Video Mockup block */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 w-full pt-2">
-                {/* Active Player */}
-                <div className="md:col-span-7 aspect-video bg-gray-900 rounded-2xl overflow-hidden relative flex items-center justify-center group/video cursor-pointer border border-gray-800">
-                  {/* Subtle static grid mesh in player */}
-                  <div className="absolute inset-0 opacity-[0.15] bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:10px_10px]" />
-                  <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20 group-hover/video:scale-110 transition-transform duration-300 z-10 shadow-lg">
-                    <Play className="w-5 h-5 fill-current ml-0.5" />
-                  </div>
-                  {/* Bottom Video Progress overlay */}
-                  <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/80 to-transparent z-10 flex items-center justify-between text-[10px] text-gray-300 font-mono">
-                    <span>NASA Artemis Launch Briefing</span>
-                    <span>1:42 / 3:15</span>
-                  </div>
-                </div>
-
-                {/* Playlist list */}
-                <div className="md:col-span-5 flex flex-col gap-2 justify-between">
-                  <div className="p-3 bg-gray-50/80 border border-gray-200/40 rounded-xl flex items-center gap-3 hover:bg-gray-100/80 transition-colors cursor-pointer">
-                    <div className="w-10 h-7 rounded bg-gray-300 flex items-center justify-center flex-shrink-0">
-                      <Play className="w-3 h-3 text-gray-500 fill-current" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-gray-700 truncate">EU Climate Policy Summit</p>
-                      <p className="text-[9px] text-gray-400">12k views • 2h ago</p>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-gray-50/80 border border-gray-200/40 rounded-xl flex items-center gap-3 hover:bg-gray-100/80 transition-colors cursor-pointer">
-                    <div className="w-10 h-7 rounded bg-gray-300 flex items-center justify-center flex-shrink-0">
-                      <Play className="w-3 h-3 text-gray-500 fill-current" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-gray-700 truncate">Global Semiconductor Shortage</p>
-                      <p className="text-[9px] text-gray-400">45k views • 5h ago</p>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-gray-50/80 border border-gray-200/40 rounded-xl flex items-center gap-3 hover:bg-gray-100/80 transition-colors cursor-pointer">
-                    <div className="w-10 h-7 rounded bg-gray-300 flex items-center justify-center flex-shrink-0">
-                      <Play className="w-3 h-3 text-gray-500 fill-current" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-gray-700 truncate">Federal Interest Rate Policy</p>
-                      <p className="text-[9px] text-gray-400">8k views • 1d ago</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* Desire / Chat Interactive Mockup Section - Variant 4 (Neo-Minimalist Slate) */}
-      <section className="relative z-10 border-t border-gray-200/50 bg-transparent py-32">
-        <div className="w-full max-w-[1200px] mx-auto px-6 md:px-0 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          {/* Left Column: Responsive text and buttons */}
-          <div className="lg:col-span-5 space-y-6">
-            <span className="px-4 py-1.5 rounded-full bg-[#4255d4]/10 text-[#4255d4] font-mono text-[10.5px] uppercase tracking-[0.2em] font-bold border border-[#4255d4]/20">
-              Interactive AI
-            </span>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight text-[#0f172a] uppercase font-sans">
-              Conversations in Context.
+            <motion.span
+              initial={{ opacity: 0, scale: 0.8, y: 10 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
+              className="inline-block px-4 py-1.5 rounded-full bg-[#4255d4]/10 text-[#4255d4] font-mono text-[10.5px] uppercase tracking-[0.2em] font-bold border border-[#4255d4]/20 mb-5"
+            >
+              Simple Process
+            </motion.span>
+            <h2 className="text-2xl md:text-4xl font-black tracking-tight text-[#0f172a] leading-tight mb-3">
+              How DailyBrief AI works
             </h2>
-            <p className="text-gray-600 text-lg leading-relaxed">
-              Ask about current events, trend patterns, or specific timelines. The assistant triggers DuckDuckGo searches in the background to inject verified news context into the chat loop.
+            <p className="text-gray-400 text-sm md:text-base max-w-lg mx-auto">
+              Three steps from question to insight. No clutter, no paywalls, no noise.
             </p>
-            <div className="pt-2">
-              <Link to="/feed">
-                <motion.button
-                  whileHover={{ scale: 1.01 }}
-                  className="px-8 py-4 bg-[#4255d4] hover:bg-[#3647b5] text-white rounded-full font-bold text-base hover:shadow-lg hover:shadow-blue-500/10 transition-all inline-flex items-center gap-2 cursor-pointer"
+          </motion.div>
+
+          {/* 3 Steps */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-5 relative">
+            {/* SVG arrows overlay — advanced animations */}
+            <svg className="hidden md:block absolute inset-0 w-full h-full pointer-events-none z-20" viewBox="0 0 1000 200" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                {/* Glow filter for dots */}
+                <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                {/* Line glow filter */}
+                <filter id="lineGlow" x="-20%" y="-100%" width="140%" height="300%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              {/* ===== ARROW 1 ===== */}
+              {/* Glow shadow line (behind main line) */}
+              <motion.line
+                x1="310" y1="12" x2="448" y2="12"
+                stroke="#ef4444"
+                strokeWidth="6"
+                strokeLinecap="round"
+                opacity="0.3"
+                filter="url(#lineGlow)"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 0.3 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+              />
+              {/* Main line */}
+              <motion.line
+                x1="310" y1="12" x2="448" y2="12"
+                stroke="#ef4444"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              />
+              {/* Arrowhead with spring bounce */}
+              <motion.polygon
+                points="443,4 458,12 443,20"
+                fill="#ef4444"
+                filter="url(#glow)"
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring', stiffness: 500, damping: 12, delay: 1 }}
+                style={{ transformOrigin: '443px 12px' }}
+              />
+              {/* Traveling glow dot */}
+              <motion.circle
+                r="3"
+                fill="#ef4444"
+                filter="url(#glow)"
+                initial={{ cx: 310, cy: 12, opacity: 0 }}
+                whileInView={{ cx: [310, 448], opacity: [0, 1, 1, 0] }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.5, ease: 'easeInOut' }}
+              />
+              {/* Particle trail dots */}
+              {[0, 0.15, 0.3].map((offset, pi) => (
+                <motion.circle
+                  key={`p1-${pi}`}
+                  r="1.5"
+                  fill="#ef4444"
+                  opacity="0.4"
+                  initial={{ cx: 310, cy: 12, opacity: 0 }}
+                  whileInView={{ cx: [310, 448], opacity: [0, 0.6, 0.3, 0] }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.5 + offset, ease: 'easeInOut' }}
+                />
+              ))}
+
+              {/* ===== ARROW 2 ===== */}
+              {/* Glow shadow line */}
+              <motion.line
+                x1="640" y1="12" x2="778" y2="12"
+                stroke="#ef4444"
+                strokeWidth="6"
+                strokeLinecap="round"
+                opacity="0.3"
+                filter="url(#lineGlow)"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 0.3 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.7, delay: 0.6 }}
+              />
+              {/* Main line */}
+              <motion.line
+                x1="640" y1="12" x2="778" y2="12"
+                stroke="#ef4444"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              />
+              {/* Arrowhead with spring bounce */}
+              <motion.polygon
+                points="773,4 788,12 773,20"
+                fill="#ef4444"
+                filter="url(#glow)"
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring', stiffness: 500, damping: 12, delay: 1.3 }}
+                style={{ transformOrigin: '773px 12px' }}
+              />
+              {/* Traveling glow dot */}
+              <motion.circle
+                r="3"
+                fill="#ef4444"
+                filter="url(#glow)"
+                initial={{ cx: 640, cy: 12, opacity: 0 }}
+                whileInView={{ cx: [640, 778], opacity: [0, 1, 1, 0] }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.8, ease: 'easeInOut' }}
+              />
+              {/* Particle trail dots */}
+              {[0, 0.15, 0.3].map((offset, pi) => (
+                <motion.circle
+                  key={`p2-${pi}`}
+                  r="1.5"
+                  fill="#ef4444"
+                  opacity="0.4"
+                  initial={{ cx: 640, cy: 12, opacity: 0 }}
+                  whileInView={{ cx: [640, 778], opacity: [0, 0.6, 0.3, 0] }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.8 + offset, ease: 'easeInOut' }}
+                />
+              ))}
+            </svg>
+
+            {[
+              {
+                step: '01',
+                title: 'Search',
+                desc: 'Type any topic — AI, sports, crypto, geopolitics. DailyBrief AI scans sources in real-time.',
+                stat: '500+',
+                statLabel: 'Sources',
+                icon: Search,
+                gradient: 'from-blue-500 to-indigo-500',
+                glow: 'shadow-blue-500/25',
+                hoverBorder: 'hover:border-blue-400/40',
+                bg: 'bg-blue-50/80',
+              },
+              {
+                step: '02',
+                title: 'AI Curates',
+                desc: 'Gemini filters, summarizes, and categorizes. You get structured briefings, not noise.',
+                stat: '<1s',
+                statLabel: 'Latency',
+                icon: Zap,
+                gradient: 'from-purple-500 to-violet-500',
+                glow: 'shadow-purple-500/25',
+                hoverBorder: 'hover:border-purple-400/40',
+                bg: 'bg-purple-50/80',
+              },
+              {
+                step: '03',
+                title: 'Stay Informed',
+                desc: 'Read summaries, listen via TTS, translate to Hindi, or watch related videos.',
+                stat: '30+',
+                statLabel: 'Categories',
+                icon: BookOpen,
+                gradient: 'from-emerald-500 to-teal-500',
+                glow: 'shadow-emerald-500/25',
+                hoverBorder: 'hover:border-emerald-400/40',
+                bg: 'bg-emerald-50/80',
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.step}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{
+                  duration: 0.7,
+                  delay: i * 0.18,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                whileHover={{ y: -6, transition: { duration: 0.3 } }}
+                className={`relative z-10 text-center group p-6 rounded-2xl border border-gray-100 ${item.hoverBorder} bg-white/50 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl ${item.glow} cursor-default`}
+              >
+                {/* Large background step number with yellow underline */}
+                <div className="absolute top-2 right-3 select-none pointer-events-none z-0">
+                  <div className="text-[80px] font-black leading-none text-gray-200/80">
+                    {item.step}
+                  </div>
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.18 + 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full h-[4px] bg-yellow-400 rounded-full origin-left mt-1"
+                  />
+                </div>
+
+                {/* Hover glow overlay */}
+                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-b ${item.gradient} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-500 pointer-events-none`} />
+
+                {/* Icon cluster */}
+                <div className="relative mx-auto mb-5 w-[76px] h-[76px]">
+                  {/* Outer rotating ring */}
+                  <motion.div
+                    initial={{ rotate: 0 }}
+                    whileInView={{ rotate: 360 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+                    className="absolute inset-[-6px] rounded-full border-[1.5px] border-dashed border-gray-200/60"
+                  />
+                  {/* Pulsing bg ring */}
+                  <motion.div
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ type: 'spring', stiffness: 200, damping: 15, delay: i * 0.18 + 0.2 }}
+                    className={`absolute inset-0 rounded-full ${item.bg}`}
+                  />
+                  {/* Main icon */}
+                  <motion.div
+                    whileHover={{ scale: 1.12, rotate: 8 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 12 }}
+                    className={`relative w-[76px] h-[76px] mx-auto rounded-full bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-xl ${item.glow} cursor-pointer z-10`}
+                  >
+                    <item.icon className="w-6 h-6 text-white" />
+                  </motion.div>
+                  {/* Step badge with spring */}
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    whileInView={{ scale: 1, rotate: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 18, delay: i * 0.18 + 0.45 }}
+                    className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-white border-2 border-gray-100 flex items-center justify-center text-[10px] font-black text-gray-500 z-20 shadow-lg"
+                  >
+                    {item.step}
+                  </motion.div>
+                </div>
+
+                {/* Text */}
+                <motion.h3
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.18 + 0.3 }}
+                  className="text-base md:text-lg font-bold text-[#0f172a] mb-2"
                 >
-                  Launch Assistant
-                  <Bot className="w-5 h-5" />
-                </motion.button>
-              </Link>
-            </div>
+                  {item.title}
+                </motion.h3>
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.18 + 0.4 }}
+                  className="text-gray-400 text-[13px] leading-relaxed max-w-[280px] mx-auto mb-4"
+                >
+                  {item.desc}
+                </motion.p>
+
+                {/* Stat badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20, delay: i * 0.18 + 0.5 }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100"
+                >
+                  <span className={`text-sm font-black bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}>{item.stat}</span>
+                  <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{item.statLabel}</span>
+                </motion.div>
+
+                {/* Bottom accent line on hover */}
+                <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-16 h-[2px] bg-gradient-to-r ${item.gradient} rounded-full transition-all duration-500`} />
+              </motion.div>
+            ))}
           </div>
 
-          {/* Right Column: Premium Mockup Image */}
-          <div className="lg:col-span-7 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[450px] p-[1px] bg-transparent rounded-3xl overflow-visible flex group">
-              {/* Ambient purple/blue glow backdrop matching Variant 4 */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#4255d4]/15 to-purple-500/15 rounded-3xl blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              
-              <img
-                src={chatMockup}
-                alt="AI Chat Mockup"
-                loading="lazy"
-                decoding="async"
-                className="w-full h-auto object-cover rounded-3xl border border-gray-200/50 shadow-xl group-hover:shadow-2xl group-hover:border-[#4255d4]/30 transition-all duration-300 relative z-10"
-              />
-            </div>
-          </div>
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            className="text-center mt-16"
+          >
+            <Link to="/feed">
+              <motion.button
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="group relative px-9 py-4 bg-[#0f172a] hover:bg-[#1e293b] text-white font-bold text-sm rounded-full shadow-xl shadow-[#0f172a]/20 transition-all inline-flex items-center gap-2.5 cursor-pointer overflow-hidden"
+              >
+                <span className="relative z-10">Try it now</span>
+                <motion.div
+                  className="relative z-10"
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
+                {/* Shimmer sweep */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              </motion.button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
@@ -701,15 +815,12 @@ const Home = () => {
         </div>
 
         <div className="w-full max-w-[1200px] mx-auto px-4 md:px-0 relative">
-          <div className="text-center max-w-[800px] space-y-4 mb-20 mx-auto">
-            <span className="px-4 py-1.5 rounded-full bg-[#4255d4]/10 text-[#4255d4] font-mono text-[10.5px] uppercase tracking-[0.2em] font-bold border border-[#4255d4]/20">
-              Global Coverage
-            </span>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight text-[#0f172a] uppercase font-sans">
+          <div className="text-center max-w-[800px] space-y-3 mb-16 mx-auto">
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight text-[#0f172a] leading-tight">
               Real-Time Regional Coverage
             </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
-              As the Earth rotates, NovaBrief dynamically shifts focus to parse, filter, and summarize primary feeds from top outlets in the active region.
+            <p className="text-gray-400 text-sm md:text-base max-w-xl mx-auto">
+              As the Earth rotates, DailyBrief AI dynamically shifts focus to parse and summarize feeds from top outlets.
             </p>
           </div>
 
@@ -777,12 +888,24 @@ const Home = () => {
                           className="flex items-center gap-4 bg-gray-50/50 border border-gray-200/30 rounded-2xl p-4 hover:bg-white hover:border-[#4255d4]/20 hover:shadow-md transition-all duration-300"
                         >
                           <div className="relative">
-                            <div
-                              className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-sm"
-                              style={{ backgroundColor: source.color }}
-                            >
-                              {source.name[0]}
-                            </div>
+                            {source.logo ? (
+                              <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
+                                <img
+                                  src={source.logo}
+                                  alt={source.name}
+                                  className="w-7 h-7 object-contain"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                              </div>
+                            ) : (
+                              <div
+                                className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-sm"
+                                style={{ backgroundColor: source.color }}
+                              >
+                                {source.name[0]}
+                              </div>
+                            )}
                             <span className="absolute -bottom-1 -right-1 text-sm leading-none">{source.flag}</span>
                           </div>
                           <div className="flex-1 min-w-0">
@@ -809,53 +932,103 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Action / CTA & Footer Section */}
-      <section className="relative z-10 w-full max-w-[1200px] mx-auto px-6 md:px-0 py-28">
-        <div className="p-1 bg-gradient-to-br from-primary/20 via-transparent to-purple-500/20 border border-border rounded-[3rem] shadow-2xl overflow-hidden relative">
-          <div className="bg-card rounded-[calc(3rem-0.25rem)] border border-border/50 p-12 lg:p-20 text-center space-y-8 relative overflow-hidden">
-            {/* Glow Orb inside CTA card */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-[60px] pointer-events-none" />
+      {/* CTA Section — 21st.dev Rectangle Style with Glow */}
+      <section className="relative z-10 w-full max-w-[1200px] mx-auto px-5 md:px-8 py-16">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="relative rounded-2xl overflow-hidden"
+        >
+          {/* Animated canvas background */}
+          <CTABackground />
 
-            <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-              <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-special leading-none">
-                Ready for a smarter briefing?
-              </h2>
-              <p className="text-muted-foreground text-lg">
-                Create a free account to customize your categories, filter paywalled sources, and access full AI-curated speech updates.
-              </p>
-              <div className="pt-4 flex justify-center">
-                <Link to="/feed">
-                  <motion.button
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    className="px-10 py-5 bg-foreground text-background font-bold text-lg rounded-full flex items-center gap-4 hover:bg-foreground/90 transition-all shadow-xl shadow-foreground/10 cursor-pointer"
+          {/* Yellow-orange glow border */}
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-amber-500/40 via-amber-600/20 to-amber-500/40 p-[1px] pointer-events-none z-20">
+            <div className="w-full h-full rounded-[calc(1rem-1px)] bg-transparent" />
+          </div>
+
+          {/* Inner glow on edges */}
+          <div className="absolute inset-0 rounded-2xl pointer-events-none z-20"
+            style={{
+              boxShadow: 'inset 0 0 60px rgba(245,158,11,0.08), inset 0 0 120px rgba(245,158,11,0.04)',
+            }}
+          />
+
+          {/* Content */}
+          <div className="relative z-10 px-8 py-16 md:px-20 md:py-20 text-center">
+            {/* Badge with pulse */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 10 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-7"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
+              </span>
+              <span className="text-[11px] font-semibold text-gray-400 tracking-wide">Get started</span>
+            </motion.div>
+
+            {/* Title with gradient word */}
+            <motion.h2
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="text-3xl md:text-[2.75rem] font-bold tracking-[-0.02em] text-white leading-[1.15] mb-5"
+            >
+              Start building with{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-amber-300">
+                DailyBrief AI
+              </span>
+            </motion.h2>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="text-gray-400 text-sm md:text-base max-w-md mx-auto mb-10 leading-relaxed"
+            >
+              Get started with DailyBrief AI and build your personalized news experience in no time.
+            </motion.p>
+
+            {/* CTA Button with glow */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+              className="relative inline-block"
+            >
+              <div className="absolute inset-0 bg-amber-500/20 rounded-lg blur-xl" />
+              <Link to="/feed">
+                <motion.button
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="group relative px-8 py-3.5 bg-white hover:bg-gray-50 text-[#0f172a] font-semibold text-sm rounded-lg transition-all inline-flex items-center gap-2.5 cursor-pointer shadow-lg shadow-white/10"
+                >
+                  Get Started
+                  <motion.div
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
                   >
-                    Get Started Free
-                    <div className="w-6 h-6 rounded-full bg-background/10 flex items-center justify-center">
-                      <ArrowRight className="w-3.5 h-3.5 text-background" />
-                    </div>
-                  </motion.button>
-                </Link>
-              </div>
-            </div>
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.div>
+                </motion.button>
+              </Link>
+            </motion.div>
           </div>
-        </div>
-
-        {/* Footer */}
-        <footer className="pt-24 border-t border-border/50 text-xs text-muted-foreground flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-base text-special tracking-tighter">NovaBrief</span>
-            <span className="text-muted-foreground opacity-60">|</span>
-            <span>© {new Date().getFullYear()} NovaBrief Inc. All rights reserved.</span>
-          </div>
-          <div className="flex items-center gap-6 font-medium">
-            <a href="#features" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="#features" className="hover:text-foreground transition-colors">Terms</a>
-            <a href="#features" className="hover:text-foreground transition-colors">API Docs</a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Github</a>
-          </div>
-        </footer>
+        </motion.div>
       </section>
+
+      {/* Footer */}
+      <Footer />
     </main>
   );
 };

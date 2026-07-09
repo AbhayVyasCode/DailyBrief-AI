@@ -21,6 +21,8 @@ __pycache__/
 venv/
 .venv/
 env/
+.image
+.images
 
 # Frontend
 node_modules/

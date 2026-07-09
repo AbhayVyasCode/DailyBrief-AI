@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import NewsCard from '../components/NewsCard';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, RefreshCw, Zap, Search, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Loader2, RefreshCw, Zap, Search } from 'lucide-react';
 import { newsApi } from '../services/api';
 import type { NewsItem } from '../services/types';
 

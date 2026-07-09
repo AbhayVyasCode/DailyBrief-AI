@@ -7,7 +7,6 @@ import LogoWall from '../components/LogoWall';
 import FeatureShowcase from '../components/FeatureShowcase';
 import CTABackground from '../components/CTABackground';
 import Footer from '../components/Footer';
-import dashboardMockup from '../assets/novabrief_dashboard_mockup.png';
 import PremiumGlobe from '../components/PremiumGlobe';
 import type { Marker } from 'cobe';
 
@@ -58,10 +57,48 @@ const regions = [
   }
 ];
 
+const REGION_LONGITUDES: Record<string, number> = {
+  americas: -75,
+  europe: 15,
+  mea: 40,
+  asiapacific: 120,
+};
+
 const Home = () => {
   const [activeRegion, setActiveRegion] = useState(regions[0]);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const location = useLocation();
+
+  useEffect(() => {
+    const prevBg = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = '#f8f9fa';
+    return () => {
+      document.body.style.backgroundColor = prevBg;
+    };
+  }, []);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (videoRef.current) {
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(() => {});
+          } else {
+            videoRef.current.pause();
+          }
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const navLinks = [
     { href: '/', label: 'Home', icon: HomeIcon },
@@ -93,6 +130,19 @@ const Home = () => {
     }
   }).current;
 
+  const [targetPhi, setTargetPhi] = useState(0.2618); // Initialize to Americas center (15 degrees)
+
+  const handleRegionClick = (region: typeof regions[0]) => {
+    activeRegionIdRef.current = region.id;
+    setActiveRegion(region);
+    
+    const targetLon = REGION_LONGITUDES[region.id];
+    if (targetLon !== undefined) {
+      const newTargetPhi = ((targetLon + 90) * Math.PI) / 180;
+      setTargetPhi(newTargetPhi);
+    }
+  };
+
   // Connection lines removed for performance — the globe + region cards still work
   const revealContainer = {
     hidden: { opacity: 0 },
@@ -112,7 +162,7 @@ const Home = () => {
   };
 
   return (
-    <main className="relative min-h-screen bg-[#f8f9fa] text-[#0b132b] overflow-x-clip font-sans pb-20">
+    <main className="relative min-h-screen bg-[#f8f9fa] text-[#0b132b] overflow-x-clip font-sans pb-0">
       {/* Premium Background: Subtle dot grid */}
       <div 
         className="absolute inset-0 z-0 pointer-events-none opacity-[0.4]" 
@@ -123,8 +173,10 @@ const Home = () => {
       />
 
       {/* Ambient gradient meshes */}
-      <div className="absolute top-[10%] left-[-5%] w-[500px] h-[500px] bg-gradient-to-br from-blue-500/[0.04] to-indigo-500/[0.03] rounded-full blur-[80px] pointer-events-none z-0" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-gradient-to-tl from-purple-500/[0.04] to-pink-500/[0.02] rounded-full blur-[80px] pointer-events-none z-0" />
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[10%] left-[-5%] w-[500px] h-[500px] bg-gradient-to-br from-blue-500/[0.04] to-indigo-500/[0.03] rounded-full blur-[80px]" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-gradient-to-tl from-purple-500/[0.04] to-pink-500/[0.02] rounded-full blur-[80px]" />
+      </div>
 
       {/* Enhanced Premium Header */}
       <motion.header 
@@ -365,20 +417,37 @@ const Home = () => {
           </div>
 
           {/* Card Frame */}
-          <div className="relative w-full aspect-[16/10] max-h-[580px] rounded-2xl p-[1.5px] z-10"
+          <div className="relative w-full aspect-[16/9] max-h-[580px] rounded-2xl p-[1.5px] z-10"
             style={{ background: 'linear-gradient(135deg, rgba(66,85,212,0.3), rgba(229,231,235,0.8), rgba(168,85,247,0.3))' }}
           >
             <div className="w-full h-full rounded-[14px] bg-white/90 p-1.5 flex items-center justify-center relative"
               style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.12)' }}
             >
-              <div className="w-full h-full bg-[#111] rounded-xl overflow-hidden flex items-center justify-center p-[1px]">
-                <img
-                  src={dashboardMockup}
-                  alt="DailyBrief AI Reader Dashboard Mockup"
-                  loading="lazy"
-                  decoding="async"
+              <div className="relative w-full h-full bg-[#111] rounded-xl overflow-hidden flex items-center justify-center p-[1px]">
+                <video
+                  ref={videoRef}
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                  preload="metadata"
+                  disablePictureInPicture
+                  controlsList="nodownload nofullscreen noremoteplayback"
                   className="w-full h-full object-cover rounded-[10px]"
-                />
+                  style={{ WebkitMediaControls: 'none' } as React.CSSProperties}
+                >
+                  <source src="/DailyBrief AI news video.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+
+                {/* DailyBrief AI logo overlay — covers the Gemini logo at bottom-right of video */}
+                <div className="absolute bottom-[10%] right-[7%] z-20 w-[8%] aspect-square rounded-xl overflow-hidden shadow-2xl border-2 border-white/30">
+                  <img
+                    src="/dailybrief-icon.jpg"
+                    alt="DailyBrief AI"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -416,7 +485,7 @@ const Home = () => {
       <FeatureShowcase />
 
       {/* How It Works — Premium Animated */}
-      <section className="relative z-10 border-t border-gray-200/50 py-28 overflow-hidden">
+      <section className="relative z-10 border-t border-gray-200/50 pt-28 pb-16 overflow-hidden">
         {/* Animated gradient mesh background */}
         <motion.div
           animate={{ x: [0, 30, -20, 0], y: [0, -20, 15, 0] }}
@@ -806,7 +875,7 @@ const Home = () => {
       </section>
 
       {/* Globe Visualization Section - Dotted Earth Globe with Active Region Cards */}
-      <section className="relative z-10 w-full py-32 border-t border-gray-200/50 bg-transparent flex flex-col items-center overflow-hidden">
+      <section className="relative z-10 w-full pt-16 pb-32 border-t border-gray-200/50 bg-transparent flex flex-col items-center overflow-hidden">
         {/* Gradient Mesh Background */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#4255d4]/[0.04] rounded-full blur-[120px]" />
@@ -832,7 +901,7 @@ const Home = () => {
                 {regions.map((region) => (
                   <button
                     key={region.id}
-                    onClick={() => setActiveRegion(region)}
+                    onClick={() => handleRegionClick(region)}
                     className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-300 border ${
                       activeRegion.id === region.id
                         ? 'bg-[#4255d4] text-white border-[#4255d4] shadow-lg shadow-[#4255d4]/20'
@@ -846,7 +915,11 @@ const Home = () => {
               </div>
 
               <div className="flex justify-center items-center relative h-[450px] lg:h-[500px] w-full">
-                <PremiumGlobe onRegionChange={handleRegionChange} markers={globeMarkers} />
+                <PremiumGlobe 
+                  targetPhi={targetPhi}
+                  onRegionChange={handleRegionChange} 
+                  markers={globeMarkers} 
+                />
               </div>
             </div>
 

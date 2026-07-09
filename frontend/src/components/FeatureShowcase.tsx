@@ -63,19 +63,25 @@ const FeatureShowcase = () => {
   });
 
   return (
-    <section ref={containerRef} className="relative z-10 h-[350vh]">
-      <div className="sticky top-0 h-screen w-full max-w-[1000px] mx-auto px-5 md:px-8 flex flex-col justify-center">
+    <section ref={containerRef} className="relative z-10 h-[350vh] mt-16 md:mt-24 lg:mt-32">
+      <div
+        className="sticky w-full max-w-[1150px] mx-auto px-5 md:px-8 flex flex-col justify-center"
+        style={{
+          height: 'min(820px, 90vh)',
+          top: 'calc((100vh - min(820px, 90vh)) / 2)'
+        }}
+      >
         {/* Section heading */}
-        <div className="text-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight text-[#0f172a] leading-tight">
+        <div className="text-center mb-6 md:mb-10">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-black tracking-tight text-[#0f172a] leading-tight mb-2">
             Powerful features, effortlessly simple.
           </h2>
-          <p className="text-gray-400 text-sm mt-1.5 max-w-md mx-auto">
+          <p className="text-gray-400 text-sm md:text-base lg:text-lg mt-2 max-w-xl mx-auto">
             Everything you need to stay informed — AI summaries, translation, speech, video, and chat.
           </p>
         </div>
 
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 lg:gap-16 items-center">
 
           {/* Left — compact nav */}
           <div className="space-y-1 order-2 md:order-1">
@@ -86,7 +92,7 @@ const FeatureShowcase = () => {
           </div>
 
           {/* Right — stacked card image panel */}
-          <div className="relative h-[220px] sm:h-[260px] md:h-[340px] order-1 md:order-2">
+          <div className="relative aspect-[1264/848] order-1 md:order-2 w-full h-auto">
             {features.map((f, i) => (
               <StackedCard key={f.id} feature={f} index={i} progress={scrollYProgress} total={features.length} />
             ))}
@@ -118,17 +124,17 @@ const NavItem = ({
   const barH = useTransform(progress, [s, e], ['0%', '100%']);
 
   return (
-    <motion.div style={{ opacity, x }} className="relative py-2.5 pl-4 pr-2 rounded-lg cursor-default">
-      <div className="absolute left-0 top-1.5 bottom-1.5 w-[2px] rounded-full bg-gray-100 overflow-hidden">
+    <motion.div style={{ opacity, x }} className="relative py-3 md:py-4 pl-6 pr-3 rounded-xl cursor-default">
+      <div className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-gray-100 overflow-hidden">
         <motion.div style={{ height: barH }} className={`w-full bg-gradient-to-b ${feature.color} rounded-full`} />
       </div>
-      <div className="flex items-center gap-3">
-        <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center flex-shrink-0`}>
-          <Icon className="w-4.5 h-4.5 text-white" />
+      <div className="flex items-center gap-4">
+        <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-xl lg:rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+          <Icon className="w-5 h-5 lg:w-6 h-6 text-white" />
         </div>
         <div>
-          <h3 className="text-base font-bold text-[#0f172a] leading-tight">{feature.title}</h3>
-          <p className="text-gray-400 text-[13px] leading-snug hidden md:block">{feature.desc}</p>
+          <h3 className="text-base lg:text-lg xl:text-xl font-bold text-[#0f172a] leading-tight">{feature.title}</h3>
+          <p className="text-gray-400 text-[13px] lg:text-sm xl:text-base leading-snug hidden md:block mt-1">{feature.desc}</p>
         </div>
       </div>
     </motion.div>
@@ -149,7 +155,6 @@ const StackedCard = ({
   const seg = 1 / total;
   const s = index * seg;
   const e = (index + 1) * seg;
-  const prevEnd = index > 0 ? (index - 1) * seg + seg : 0;
 
   // Card 0: visible at start, fades out as you scroll past
   // Cards 1+: hidden until their segment, fades out when next segment starts

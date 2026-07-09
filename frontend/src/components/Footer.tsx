@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Newspaper, ArrowUpRight, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { ArrowUpRight, Github, Twitter, Linkedin, Mail } from 'lucide-react';
 
 const footerLinks = {
   Product: [
@@ -120,21 +120,27 @@ const Footer = () => {
         </div>
 
         {/* Giant brand watermark */}
-        <div className="overflow-hidden pt-2 pb-2">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center justify-center gap-4 md:gap-6"
+        <div className="overflow-hidden pt-2 pb-2 flex justify-center">
+          <Link
+            to="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="group cursor-pointer inline-flex items-center gap-4 md:gap-6"
           >
-            <div className="w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl shadow-black/10">
-              <img src="/features/DailyBrief AI icon.jpg" alt="DailyBrief AI" className="w-full h-full object-cover" />
-            </div>
-            <span className="text-5xl md:text-8xl font-black tracking-tighter text-[#0f172a] select-none">
-              DailyBrief AI
-            </span>
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center justify-center gap-4 md:gap-6"
+            >
+              <div className="w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl shadow-black/10 group-hover:scale-105 group-hover:shadow-2xl transition-all duration-300">
+                <img src="/features/DailyBrief AI icon.jpg" alt="DailyBrief AI" className="w-full h-full object-cover" />
+              </div>
+              <span className="text-5xl md:text-8xl font-black tracking-tighter text-[#0f172a] select-none group-hover:text-blue-600 transition-colors duration-300">
+                DailyBrief AI
+              </span>
+            </motion.div>
+          </Link>
         </div>
       </motion.div>
     </footer>

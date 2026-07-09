@@ -81,3 +81,21 @@ body {
     @apply bg-white/50 dark:bg-white/5 border border-black/5 dark:border-white/10 backdrop-blur-xl;
   }
 }
+
+/* ─── Suppress browser Picture-in-Picture overlay and video controls ────── */
+video::-webkit-media-controls {
+  display: none !important;
+}
+video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+}
+video::--webkit-media-controls-start-playback-button {
+  display: none !important;
+}
+/* Firefox */
+video::-moz-media-controls {
+  display: none !important;
+}

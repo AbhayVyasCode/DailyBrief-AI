@@ -67,7 +67,7 @@ const CTABackground = () => {
     }
 
     // --- Wave points for mesh ---
-    const wavePoints: { x: number; y: number; baseY: number; freq: number; amp: number; phase: number }[] = [];
+    const wavePoints: { x: number; y: number; baseY: number; freq: number; amp: number; phase: number; speed: number }[] = [];
     const waveCount = 8;
     const waveSpacing = height / (waveCount + 1);
     for (let i = 0; i < waveCount; i++) {
@@ -79,6 +79,7 @@ const CTABackground = () => {
           freq: 0.003 + Math.random() * 0.002,
           amp: 8 + Math.random() * 15,
           phase: Math.random() * Math.PI * 2,
+          speed: 0.5 + Math.random() * 1.5,
         });
       }
     }

@@ -19,8 +19,8 @@ const Layout = ({ children }: LayoutProps) => {
       className={`${isHomePage ? 'bg-[#f8f9fa]' : 'bg-background'} text-foreground font-sans selection:bg-primary/20 min-h-screen`}
     >
       {!isHomePage && <ThreeBackground />}
-      {!isHomePage && <Navbar />}
-      <main className={isHomePage ? "w-full relative z-10 bg-[#f8f9fa]" : "container mx-auto px-4 pb-24 pt-20 md:pt-24 md:pb-8 relative z-10"}>
+      <Navbar />
+      <main className={isHomePage ? "w-full relative z-10 bg-[#f8f9fa] pt-[72px]" : "container mx-auto px-4 pb-24 pt-20 md:pt-24 md:pb-8 relative z-10"}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

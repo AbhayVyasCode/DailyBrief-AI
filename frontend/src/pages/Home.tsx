@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
-import { ArrowRight, Zap, Volume2, Languages, Play, Bot, Newspaper, TrendingUp, Settings, Search, Video, Sparkles, Home as HomeIcon, FileText, BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+import { ArrowRight, Zap, Volume2, Languages, Play, Bot, Search, FileText, BookOpen } from 'lucide-react';
 import LogoWall from '../components/LogoWall';
 import FeatureShowcase from '../components/FeatureShowcase';
 import CTABackground from '../components/CTABackground';
@@ -14,48 +14,50 @@ const regions = [
   {
     id: 'americas',
     name: 'Americas',
-    flag: '🇺🇸',
+    flag: '\uD83C\uDDFA\uD83C\uDDF8',
     longitude: -75,
     sources: [
-      { name: 'The New York Times', region: 'US Desk', stats: '130M+ Readers', color: '#0f172a', flag: '🇺🇸', lat: 40.7128, lon: -74.006, logo: 'https://cdn.brandfetch.io/ida5pjO05F/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1667566812797' },
-      { name: 'CNN', region: 'Cable News', stats: '95M+ Viewers', color: '#cc0000', flag: '🇺🇸', lat: 33.749, lon: -84.388, logo: 'https://cdn.brandfetch.io/idhidc5593/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1721816108390' },
-      { name: 'O Globo', region: 'Brazil', stats: '25M+ Readers', color: '#1e40af', flag: '🇧🇷', lat: -22.9068, lon: -43.1729, logo: 'https://cdn.brandfetch.io/idnDVRGJl3/w/320/h/320/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1781755677905' }
+      { name: 'The New York Times', region: 'US Desk', stats: '130M+ Readers', color: '#0f172a', flag: '\uD83C\uDDFA\uD83C\uDDF8', lat: 40.7128, lon: -74.006, logo: 'https://cdn.brandfetch.io/ida5pjO05F/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1667566812797' },
+      { name: 'CNN', region: 'Cable News', stats: '95M+ Viewers', color: '#cc0000', flag: '\uD83C\uDDFA\uD83C\uDDF8', lat: 33.749, lon: -84.388, logo: 'https://cdn.brandfetch.io/idhidc5593/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1721816108390' },
+      { name: 'O Globo', region: 'Brazil', stats: '25M+ Readers', color: '#1e40af', flag: '\uD83C\uDDE7\uD83C\uDDF7', lat: -22.9068, lon: -43.1729, logo: 'https://cdn.brandfetch.io/idnDVRGJl3/w/320/h/320/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1781755677905' }
     ]
   },
   {
     id: 'europe',
     name: 'Europe',
-    flag: '🇪🇺',
+    flag: '\uD83C\uDDEA\uD83C\uDDFA',
     longitude: 15,
     sources: [
-      { name: 'BBC News', region: 'UK Desk', stats: '100M+ Readers', color: '#bb1919', flag: '🇬🇧', lat: 51.5074, lon: -0.1278, logo: 'https://cdn.brandfetch.io/idNQsCsD6X/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1777662657597' },
-      { name: 'Le Monde', region: 'France', stats: '15M+ Readers', color: '#111827', flag: '🇫🇷', lat: 48.8566, lon: 2.3522, logo: 'https://cdn.brandfetch.io/idRhM8sw7p/w/1080/h/1080/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1778152535542' },
-      { name: 'Der Spiegel', region: 'Germany', stats: '12M+ Readers', color: '#e50000', flag: '🇩🇪', lat: 53.5511, lon: 9.9937, logo: 'https://cdn.brandfetch.io/idBp3yFRhE/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1781719367200' }
+      { name: 'BBC News', region: 'UK Desk', stats: '100M+ Readers', color: '#bb1919', flag: '\uD83C\uDDEC\uD83C\uDDE7', lat: 51.5074, lon: -0.1278, logo: 'https://cdn.brandfetch.io/idNQsCsD6X/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1777662657597' },
+      { name: 'Le Monde', region: 'France', stats: '15M+ Readers', color: '#111827', flag: '\uD83C\uDDEB\uD83C\uDDF7', lat: 48.8566, lon: 2.3522, logo: 'https://cdn.brandfetch.io/idRhM8sw7p/w/1080/h/1080/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1778152535542' },
+      { name: 'Der Spiegel', region: 'Germany', stats: '12M+ Readers', color: '#e50000', flag: '\uD83C\uDDE9\uD83C\uDDEA', lat: 53.5511, lon: 9.9937, logo: 'https://cdn.brandfetch.io/idBp3yFRhE/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1781719367200' }
     ]
   },
   {
     id: 'mea',
     name: 'Middle East & Africa',
-    flag: '🇦🇪',
+    flag: '\uD83C\uDDE6\uD83C\uDDEA',
     longitude: 40,
     sources: [
-      { name: 'Al Jazeera', region: 'Qatar', stats: '80M+ Readers', color: '#d97706', flag: '🇶🇦', lat: 25.2854, lon: 51.5310, logo: 'https://cdn.brandfetch.io/idF4kPeaPe/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1781716269866' },
-      { name: 'Sky News Arabia', region: 'UAE Desk', stats: '30M+ Viewers', color: '#0284c7', flag: '🇦🇪', lat: 25.2048, lon: 55.2708, logo: 'https://cdn.brandfetch.io/id6Mq6uhOk/w/300/h/300/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1773058403989' },
-      { name: 'Mail & Guardian', region: 'S. Africa', stats: '5M+ Readers', color: '#16a34a', flag: '🇿🇦', lat: -33.9249, lon: 18.4241, logo: 'https://cdn.brandfetch.io/id-O8jA71n/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1781824876085' }
+      { name: 'Al Jazeera', region: 'Qatar', stats: '80M+ Readers', color: '#d97706', flag: '\uD83C\uDDF6\uD83C\uDDE6', lat: 25.2854, lon: 51.5310, logo: 'https://cdn.brandfetch.io/idF4kPeaPe/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1781716269866' },
+      { name: 'Sky News Arabia', region: 'UAE Desk', stats: '30M+ Viewers', color: '#0284c7', flag: '\uD83C\uDDE6\uD83C\uDDEA', lat: 25.2048, lon: 55.2708, logo: 'https://cdn.brandfetch.io/id6Mq6uhOk/w/300/h/300/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1773058403989' },
+      { name: 'Mail & Guardian', region: 'S. Africa', stats: '5M+ Readers', color: '#16a34a', flag: '\uD83C\uDDFF\uD83C\uDDE6', lat: -33.9249, lon: 18.4241, logo: 'https://cdn.brandfetch.io/id-O8jA71n/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1781824876085' }
     ]
   },
   {
     id: 'asiapacific',
     name: 'Asia-Pacific',
-    flag: '🇯🇵',
+    flag: '\uD83C\uDDEF\uD83C\uDDF5',
     longitude: 105,
     sources: [
-      { name: 'News On Japan', region: 'Japan', stats: '10M+ Circ.', color: '#8b5cf6', flag: '🇯🇵', lat: 35.6762, lon: 139.6503, logo: 'https://cdn.brandfetch.io/idjVI7H1i0/w/400/h/400/theme/dark/icon.png?c=1bxid64Mup7aczewSAYMX&t=1781860922342' },
-      { name: 'NDTV', region: 'India', stats: '50M+ Viewers', color: '#dc2626', flag: '🇮🇳', lat: 28.6139, lon: 77.2090, logo: 'https://cdn.brandfetch.io/idCIBdadOR/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1774321079668' },
-      { name: 'SCMP', region: 'Hong Kong', stats: '18M+ Readers', color: '#005a9c', flag: '🇭🇰', lat: 22.3193, lon: 114.1694, logo: 'https://cdn.brandfetch.io/idqyZMY8gD/w/192/h/192/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1781717765813' }
+      { name: 'News On Japan', region: 'Japan', stats: '10M+ Circ.', color: '#8b5cf6', flag: '\uD83C\uDDEF\uD83C\uDDF5', lat: 35.6762, lon: 139.6503, logo: 'https://cdn.brandfetch.io/idjVI7H1i0/w/400/h/400/theme/dark/icon.png?c=1bxid64Mup7aczewSAYMX&t=1781860922342' },
+      { name: 'NDTV', region: 'India', stats: '50M+ Viewers', color: '#dc2626', flag: '\uD83C\uDDEE\uD83C\uDDF3', lat: 28.6139, lon: 77.2090, logo: 'https://cdn.brandfetch.io/idCIBdadOR/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1774321079668' },
+      { name: 'SCMP', region: 'Hong Kong', stats: '18M+ Readers', color: '#005a9c', flag: '\uD83C\uDDED\uD83C\uDDF0', lat: 22.3193, lon: 114.1694, logo: 'https://cdn.brandfetch.io/idqyZMY8gD/w/192/h/192/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1781717765813' }
     ]
   }
 ];
+
+
 
 const REGION_LONGITUDES: Record<string, number> = {
   americas: -75,
@@ -67,7 +69,6 @@ const REGION_LONGITUDES: Record<string, number> = {
 const Home = () => {
   const [activeRegion, setActiveRegion] = useState(regions[0]);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const location = useLocation();
 
   useEffect(() => {
     const prevBg = document.body.style.backgroundColor;
@@ -100,15 +101,6 @@ const Home = () => {
     return () => observer.disconnect();
   }, []);
 
-  const navLinks = [
-    { href: '/', label: 'Home', icon: HomeIcon },
-    { href: '/feed', label: 'Feed', icon: Newspaper },
-    { href: '/trends', label: 'Trends', icon: TrendingUp },
-    { href: '/videos', label: 'Videos', icon: Video },
-    { href: '/tools', label: 'AI Tools', icon: Sparkles },
-    { href: '/search', label: 'Search', icon: Search },
-    { href: '/settings', label: 'Settings', icon: Settings },
-  ];
 
   // Globe markers (stick to globe surface via cobe)
   const globeMarkers: Marker[] = activeRegion.sources.map((source, i) => ({
@@ -178,77 +170,7 @@ const Home = () => {
         <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-gradient-to-tl from-purple-500/[0.04] to-pink-500/[0.02] rounded-full blur-[80px]" />
       </div>
 
-      {/* Enhanced Premium Header */}
-      <motion.header 
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-50 w-full bg-white/80 backdrop-blur-xl border-b border-gray-200/50"
-      >
-        <div className="max-w-[1200px] mx-auto px-4 md:px-0 h-[72px] flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <motion.div 
-              whileHover={{ rotate: -5, scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-black/10"
-            >
-              <img src="/features/DailyBrief AI icon.jpg" alt="DailyBrief AI" className="w-full h-full object-cover" />
-            </motion.div>
-            <span className="font-extrabold text-xl text-[#0b132b] tracking-tight">DailyBrief AI</span>
-          </Link>
 
-          {/* Center Navigation */}
-          <nav className="hidden lg:flex items-center gap-1 bg-white/50 backdrop-blur-md rounded-full px-2 py-1.5 border border-gray-200/50 shadow-sm">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = location.pathname === link.href;
-              
-              return (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`relative px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all duration-300 ${
-                    isActive 
-                      ? 'text-white' 
-                      : 'text-gray-600 hover:text-[#4255d4] hover:bg-white/80'
-                  }`}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="header-nav-indicator"
-                      className="absolute inset-0 bg-gradient-to-r from-[#4255d4] to-[#6366f1] rounded-full"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                  <span className="relative z-10 flex items-center gap-2">
-                    <Icon className="w-4 h-4" />
-                    <span className="hidden xl:inline">{link.label}</span>
-                  </span>
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Action Button */}
-          <div className="flex items-center gap-3">
-            <SignedOut>
-              <SignInButton mode="modal">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="px-5 py-2.5 rounded-full bg-[#0b132b] text-white font-semibold text-sm hover:bg-[#1e293b] transition-colors shadow-lg shadow-[#0b132b]/10 cursor-pointer"
-                >
-                  Sign In
-                </motion.button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
-          </div>
-        </div>
-      </motion.header>
 
       {/* Hero Section - Premium Enhanced v2 */}
       <motion.section
@@ -306,26 +228,36 @@ const Home = () => {
               </div>
             </motion.button>
           </Link>
-          <motion.button
-            whileHover={{ scale: 1.03, y: -2 }}
-            whileTap={{ scale: 0.97 }}
-            className="group px-7 py-3.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold text-[14px] rounded-full cursor-pointer transition-all duration-300 shadow-md shadow-gray-200/50 flex items-center gap-3"
-          >
-            <div className="w-6 h-6 rounded-full bg-gray-100 group-hover:bg-[#4255d4]/10 flex items-center justify-center transition-colors">
-              <Play className="w-3 h-3 text-gray-400 group-hover:text-[#4255d4] transition-colors ml-0.5" />
-            </div>
-            Watch Demo
-          </motion.button>
+          <Link to="/videos">
+            <motion.button
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="group px-7 py-3.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold text-[14px] rounded-full cursor-pointer transition-all duration-300 shadow-md shadow-gray-200/50 flex items-center gap-3"
+            >
+              <div className="w-6 h-6 rounded-full bg-gray-100 group-hover:bg-[#4255d4]/10 flex items-center justify-center transition-colors">
+                <Play className="w-3 h-3 text-gray-400 group-hover:text-[#4255d4] transition-colors ml-0.5" />
+              </div>
+              Watch news videos
+            </motion.button>
+          </Link>
         </motion.div>
 
         {/* Enhanced Trust strip with avatars + live counter */}
         <motion.div variants={revealItem} className="flex flex-wrap items-center justify-center gap-4 mb-10 text-[12px] text-gray-400">
           <div className="flex items-center gap-2.5">
             <div className="flex -space-x-2">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="w-5 h-5 rounded-full border-2 border-white shadow-sm" style={{
-                  background: `linear-gradient(135deg, ${['#3b82f6','#8b5cf6','#ec4899','#f59e0b'][i]}, ${['#2563eb','#7c3aed','#db2777','#d97706'][i]})`
-                }} />
+              {[
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80",
+                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80",
+                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80",
+                "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80"
+              ].map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  alt={`User ${i + 1}`}
+                  className="w-5.5 h-5.5 rounded-full border-2 border-white shadow-sm object-cover"
+                />
               ))}
             </div>
             <span className="font-semibold text-gray-600">50k+</span>
@@ -340,8 +272,7 @@ const Home = () => {
           <span className="w-px h-3.5 bg-gray-200" />
           <div className="flex items-center gap-1.5">
             <Bot className="w-3 h-3 text-[#4255d4]" />
-            <span className="font-semibold text-gray-600">Gemini</span>
-            <span className="text-gray-400">AI powered</span>
+            <span className="font-semibold text-gray-600">AI powered</span>
           </div>
           <span className="w-px h-3.5 bg-gray-200 hidden sm:block" />
           <div className="hidden sm:flex items-center gap-1.5">
@@ -484,364 +415,262 @@ const Home = () => {
       {/* Intelligent Features — Scroll-Pinned Showcase */}
       <FeatureShowcase />
 
-      {/* How It Works — Premium Animated */}
-      <section className="relative z-10 border-t border-gray-200/50 pt-28 pb-16 overflow-hidden">
-        {/* Animated gradient mesh background */}
-        <motion.div
-          animate={{ x: [0, 30, -20, 0], y: [0, -20, 15, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/[0.04] rounded-full blur-[100px] pointer-events-none"
-        />
-        <motion.div
-          animate={{ x: [0, -25, 20, 0], y: [0, 15, -25, 0] }}
-          transition={{ duration: 30, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-[10%] right-[-5%] w-[450px] h-[450px] bg-purple-500/[0.04] rounded-full blur-[100px] pointer-events-none"
-        />
+      {/* How It Works — Premium Redesign */}
+      <section className="relative z-10 border-t border-gray-100 pt-28 pb-20 overflow-hidden">
 
-        {/* Floating particles */}
-        {[...Array(6)].map((_, i) => (
+        {/* Ambient background blobs */}
+        <div className="absolute inset-0 pointer-events-none">
           <motion.div
-            key={i}
-            animate={{
-              y: [0, -30 - i * 10, 0],
-              x: [0, (i % 2 === 0 ? 15 : -15), 0],
-              opacity: [0.15, 0.3, 0.15],
-            }}
-            transition={{
-              duration: 6 + i * 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: i * 0.8,
-            }}
-            className="absolute w-1.5 h-1.5 rounded-full bg-[#4255d4]/30 pointer-events-none"
-            style={{
-              left: `${15 + i * 14}%`,
-              top: `${20 + (i % 3) * 25}%`,
-            }}
+            animate={{ x: [0, 40, -20, 0], y: [0, -30, 20, 0] }}
+            transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-0 left-[-15%] w-[600px] h-[600px] bg-indigo-500/[0.04] rounded-full blur-[120px]"
           />
-        ))}
+          <motion.div
+            animate={{ x: [0, -30, 25, 0], y: [0, 25, -20, 0] }}
+            transition={{ duration: 34, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-violet-500/[0.04] rounded-full blur-[100px]"
+          />
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], opacity: [0.03, 0.06, 0.03] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-400/[0.04] rounded-full blur-[100px]"
+          />
+        </div>
 
-        {/* Background grid dots */}
+        {/* Subtle dot grid */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.25]"
+          className="absolute inset-0 pointer-events-none opacity-[0.18]"
           style={{
-            backgroundImage: 'radial-gradient(circle, #c4c9d4 0.7px, transparent 0.7px)',
-            backgroundSize: '24px 24px',
+            backgroundImage: 'radial-gradient(circle, #b4b9c8 0.6px, transparent 0.6px)',
+            backgroundSize: '28px 28px',
           }}
         />
 
-        <div className="w-full max-w-[1000px] mx-auto px-5 md:px-8 relative">
+        <div className="w-full max-w-[1060px] mx-auto px-5 md:px-8 relative">
+
           {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center mb-16"
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="text-center mb-20"
           >
             <motion.span
-              initial={{ opacity: 0, scale: 0.8, y: 10 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.85 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
-              className="inline-block px-4 py-1.5 rounded-full bg-[#4255d4]/10 text-[#4255d4] font-mono text-[10.5px] uppercase tracking-[0.2em] font-bold border border-[#4255d4]/20 mb-5"
+              transition={{ type: 'spring', stiffness: 350, damping: 22, delay: 0.1 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#4255d4]/8 text-[#4255d4] font-mono text-[10.5px] uppercase tracking-[0.22em] font-bold border border-[#4255d4]/15 mb-6"
             >
+              <motion.span
+                animate={{ scale: [1, 1.4, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                className="w-1.5 h-1.5 rounded-full bg-[#4255d4] inline-block"
+              />
               Simple Process
             </motion.span>
-            <h2 className="text-2xl md:text-4xl font-black tracking-tight text-[#0f172a] leading-tight mb-3">
-              How DailyBrief AI works
+
+            <h2 className="text-3xl md:text-[2.75rem] font-black tracking-tight text-[#0f172a] leading-tight mb-4">
+              How{' '}
+              <span className="relative inline-block">
+                DailyBrief AI
+                <motion.span
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-[#4255d4] to-violet-500 rounded-full origin-left"
+                />
+              </span>{' '}
+              works
             </h2>
-            <p className="text-gray-400 text-sm md:text-base max-w-lg mx-auto">
-              Three steps from question to insight. No clutter, no paywalls, no noise.
+            <p className="text-gray-400 text-sm md:text-[15px] max-w-md mx-auto leading-relaxed">
+              Three steps from question to insight — no clutter, no paywalls, no noise.
             </p>
           </motion.div>
 
-          {/* 3 Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-5 relative">
-            {/* SVG arrows overlay — advanced animations */}
-            <svg className="hidden md:block absolute inset-0 w-full h-full pointer-events-none z-20" viewBox="0 0 1000 200" preserveAspectRatio="xMidYMid meet">
-              <defs>
-                {/* Glow filter for dots */}
-                <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
-                  <feGaussianBlur stdDeviation="4" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-                {/* Line glow filter */}
-                <filter id="lineGlow" x="-20%" y="-100%" width="140%" height="300%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
+          {/* Step Cards */}
+          <div className="relative">
 
-              {/* ===== ARROW 1 ===== */}
-              {/* Glow shadow line (behind main line) */}
-              <motion.line
-                x1="310" y1="12" x2="448" y2="12"
-                stroke="#ef4444"
-                strokeWidth="6"
-                strokeLinecap="round"
-                opacity="0.3"
-                filter="url(#lineGlow)"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 0.3 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.7, delay: 0.3 }}
-              />
-              {/* Main line */}
-              <motion.line
-                x1="310" y1="12" x2="448" y2="12"
-                stroke="#ef4444"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 1 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              />
-              {/* Arrowhead with spring bounce */}
-              <motion.polygon
-                points="443,4 458,12 443,20"
-                fill="#ef4444"
-                filter="url(#glow)"
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ type: 'spring', stiffness: 500, damping: 12, delay: 1 }}
-                style={{ transformOrigin: '443px 12px' }}
-              />
-              {/* Traveling glow dot */}
-              <motion.circle
-                r="3"
-                fill="#ef4444"
-                filter="url(#glow)"
-                initial={{ cx: 310, cy: 12, opacity: 0 }}
-                whileInView={{ cx: [310, 448], opacity: [0, 1, 1, 0] }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.5, ease: 'easeInOut' }}
-              />
-              {/* Particle trail dots */}
-              {[0, 0.15, 0.3].map((offset, pi) => (
-                <motion.circle
-                  key={`p1-${pi}`}
-                  r="1.5"
-                  fill="#ef4444"
-                  opacity="0.4"
-                  initial={{ cx: 310, cy: 12, opacity: 0 }}
-                  whileInView={{ cx: [310, 448], opacity: [0, 0.6, 0.3, 0] }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.5 + offset, ease: 'easeInOut' }}
-                />
-              ))}
-
-              {/* ===== ARROW 2 ===== */}
-              {/* Glow shadow line */}
-              <motion.line
-                x1="640" y1="12" x2="778" y2="12"
-                stroke="#ef4444"
-                strokeWidth="6"
-                strokeLinecap="round"
-                opacity="0.3"
-                filter="url(#lineGlow)"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 0.3 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.7, delay: 0.6 }}
-              />
-              {/* Main line */}
-              <motion.line
-                x1="640" y1="12" x2="778" y2="12"
-                stroke="#ef4444"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 1 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              />
-              {/* Arrowhead with spring bounce */}
-              <motion.polygon
-                points="773,4 788,12 773,20"
-                fill="#ef4444"
-                filter="url(#glow)"
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ type: 'spring', stiffness: 500, damping: 12, delay: 1.3 }}
-                style={{ transformOrigin: '773px 12px' }}
-              />
-              {/* Traveling glow dot */}
-              <motion.circle
-                r="3"
-                fill="#ef4444"
-                filter="url(#glow)"
-                initial={{ cx: 640, cy: 12, opacity: 0 }}
-                whileInView={{ cx: [640, 778], opacity: [0, 1, 1, 0] }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.8, ease: 'easeInOut' }}
-              />
-              {/* Particle trail dots */}
-              {[0, 0.15, 0.3].map((offset, pi) => (
-                <motion.circle
-                  key={`p2-${pi}`}
-                  r="1.5"
-                  fill="#ef4444"
-                  opacity="0.4"
-                  initial={{ cx: 640, cy: 12, opacity: 0 }}
-                  whileInView={{ cx: [640, 778], opacity: [0, 0.6, 0.3, 0] }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.8 + offset, ease: 'easeInOut' }}
-                />
-              ))}
-            </svg>
-
-            {[
-              {
-                step: '01',
-                title: 'Search',
-                desc: 'Type any topic — AI, sports, crypto, geopolitics. DailyBrief AI scans sources in real-time.',
-                stat: '500+',
-                statLabel: 'Sources',
-                icon: Search,
-                gradient: 'from-blue-500 to-indigo-500',
-                glow: 'shadow-blue-500/25',
-                hoverBorder: 'hover:border-blue-400/40',
-                bg: 'bg-blue-50/80',
-              },
-              {
-                step: '02',
-                title: 'AI Curates',
-                desc: 'Gemini filters, summarizes, and categorizes. You get structured briefings, not noise.',
-                stat: '<1s',
-                statLabel: 'Latency',
-                icon: Zap,
-                gradient: 'from-purple-500 to-violet-500',
-                glow: 'shadow-purple-500/25',
-                hoverBorder: 'hover:border-purple-400/40',
-                bg: 'bg-purple-50/80',
-              },
-              {
-                step: '03',
-                title: 'Stay Informed',
-                desc: 'Read summaries, listen via TTS, translate to Hindi, or watch related videos.',
-                stat: '30+',
-                statLabel: 'Categories',
-                icon: BookOpen,
-                gradient: 'from-emerald-500 to-teal-500',
-                glow: 'shadow-emerald-500/25',
-                hoverBorder: 'hover:border-emerald-400/40',
-                bg: 'bg-emerald-50/80',
-              },
-            ].map((item, i) => (
+            {/* Animated connector line (desktop only) */}
+            <div className="hidden md:block absolute top-[52px] left-[16.66%] right-[16.66%] h-px z-0">
+              {/* Base track */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+              {/* Animated indigo fill */}
               <motion.div
-                key={item.step}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{
-                  duration: 0.7,
-                  delay: i * 0.18,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                whileHover={{ y: -6, transition: { duration: 0.3 } }}
-                className={`relative z-10 text-center group p-6 rounded-2xl border border-gray-100 ${item.hoverBorder} bg-white/50 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl ${item.glow} cursor-default`}
-              >
-                {/* Large background step number with yellow underline */}
-                <div className="absolute top-2 right-3 select-none pointer-events-none z-0">
-                  <div className="text-[80px] font-black leading-none text-gray-200/80">
-                    {item.step}
-                  </div>
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.18 + 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    className="w-full h-[4px] bg-yellow-400 rounded-full origin-left mt-1"
-                  />
-                </div>
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 1.4, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute inset-0 bg-gradient-to-r from-[#4255d4]/50 via-violet-500/50 to-emerald-500/50 origin-left"
+              />
+              {/* Traveling glow bead */}
+              <motion.div
+                initial={{ left: '0%', opacity: 0 }}
+                whileInView={{ left: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.6, delay: 0.5, ease: 'easeInOut' }}
+                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#4255d4] shadow-lg shadow-[#4255d4]/60 blur-[1px]"
+                style={{ position: 'absolute' }}
+              />
+            </div>
 
-                {/* Hover glow overlay */}
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-b ${item.gradient} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-500 pointer-events-none`} />
-
-                {/* Icon cluster */}
-                <div className="relative mx-auto mb-5 w-[76px] h-[76px]">
-                  {/* Outer rotating ring */}
-                  <motion.div
-                    initial={{ rotate: 0 }}
-                    whileInView={{ rotate: 360 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-                    className="absolute inset-[-6px] rounded-full border-[1.5px] border-dashed border-gray-200/60"
-                  />
-                  {/* Pulsing bg ring */}
-                  <motion.div
-                    initial={{ scale: 0.6, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ type: 'spring', stiffness: 200, damping: 15, delay: i * 0.18 + 0.2 }}
-                    className={`absolute inset-0 rounded-full ${item.bg}`}
-                  />
-                  {/* Main icon */}
-                  <motion.div
-                    whileHover={{ scale: 1.12, rotate: 8 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 12 }}
-                    className={`relative w-[76px] h-[76px] mx-auto rounded-full bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-xl ${item.glow} cursor-pointer z-10`}
-                  >
-                    <item.icon className="w-6 h-6 text-white" />
-                  </motion.div>
-                  {/* Step badge with spring */}
-                  <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 18, delay: i * 0.18 + 0.45 }}
-                    className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-white border-2 border-gray-100 flex items-center justify-center text-[10px] font-black text-gray-500 z-20 shadow-lg"
-                  >
-                    {item.step}
-                  </motion.div>
-                </div>
-
-                {/* Text */}
-                <motion.h3
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.18 + 0.3 }}
-                  className="text-base md:text-lg font-bold text-[#0f172a] mb-2"
-                >
-                  {item.title}
-                </motion.h3>
-                <motion.p
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.18 + 0.4 }}
-                  className="text-gray-400 text-[13px] leading-relaxed max-w-[280px] mx-auto mb-4"
-                >
-                  {item.desc}
-                </motion.p>
-
-                {/* Stat badge */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+              {[
+                {
+                  step: '01',
+                  title: 'Search',
+                  desc: 'Type any topic — AI, sports, crypto, geopolitics. DailyBrief AI scans 500+ sources in real-time.',
+                  stat: '500+',
+                  statLabel: 'Sources',
+                  icon: Search,
+                  accent: '#4255d4',
+                  gradFrom: 'from-blue-500',
+                  gradTo: 'to-indigo-600',
+                  glowColor: 'shadow-blue-500/30',
+                  ringColor: 'border-blue-200/60',
+                  bgTint: 'bg-blue-50',
+                  statGrad: 'from-blue-500 to-indigo-600',
+                },
+                {
+                  step: '02',
+                  title: 'AI Curates',
+                  desc: 'Gemini filters, summarizes and categorizes. You get structured briefings — not raw noise.',
+                  stat: '<1s',
+                  statLabel: 'Latency',
+                  icon: Zap,
+                  accent: '#7c3aed',
+                  gradFrom: 'from-violet-500',
+                  gradTo: 'to-purple-600',
+                  glowColor: 'shadow-violet-500/30',
+                  ringColor: 'border-violet-200/60',
+                  bgTint: 'bg-violet-50',
+                  statGrad: 'from-violet-500 to-purple-600',
+                },
+                {
+                  step: '03',
+                  title: 'Stay Informed',
+                  desc: 'Read summaries, listen via TTS, translate to Hindi or watch related video news.',
+                  stat: '30+',
+                  statLabel: 'Categories',
+                  icon: BookOpen,
+                  accent: '#059669',
+                  gradFrom: 'from-emerald-500',
+                  gradTo: 'to-teal-600',
+                  glowColor: 'shadow-emerald-500/30',
+                  ringColor: 'border-emerald-200/60',
+                  bgTint: 'bg-emerald-50',
+                  statGrad: 'from-emerald-500 to-teal-600',
+                },
+              ].map((item, i) => (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20, delay: i * 0.18 + 0.5 }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-50 border border-gray-100"
+                  key={item.step}
+                  initial={{ opacity: 0, y: 48 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.75, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={{ y: -8, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+                  className="group relative bg-white rounded-3xl border border-gray-100/80 p-7 cursor-default overflow-hidden"
+                  style={{ boxShadow: '0 4px 24px -6px rgba(0,0,0,0.06), 0 1px 4px -1px rgba(0,0,0,0.04)' }}
                 >
-                  <span className={`text-sm font-black bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}>{item.stat}</span>
-                  <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{item.statLabel}</span>
-                </motion.div>
+                  {/* Hover gradient wash */}
+                  <motion.div
+                    className={`absolute inset-0 bg-gradient-to-br ${item.gradFrom} ${item.gradTo} opacity-0 group-hover:opacity-[0.035] transition-opacity duration-500 pointer-events-none rounded-3xl`}
+                  />
 
-                {/* Bottom accent line on hover */}
-                <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-16 h-[2px] bg-gradient-to-r ${item.gradient} rounded-full transition-all duration-500`} />
-              </motion.div>
-            ))}
+                  {/* Top shimmer on hover */}
+                  <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent group-hover:via-current opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  {/* Large ghost step number */}
+                  <div className="absolute top-4 right-5 select-none pointer-events-none">
+                    <span className="text-[88px] font-black leading-none text-gray-100 group-hover:text-gray-150 transition-colors duration-500">
+                      {item.step}
+                    </span>
+                  </div>
+
+                  {/* Icon */}
+                  <div className="relative mb-6 w-fit">
+                    {/* Outer dashed spinning ring */}
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                      className={`absolute -inset-2.5 rounded-full border border-dashed ${item.ringColor}`}
+                    />
+                    {/* Pulse ring */}
+                    <motion.div
+                      animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0, 0.3] }}
+                      transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.5 }}
+                      className={`absolute inset-0 rounded-full bg-gradient-to-br ${item.gradFrom} ${item.gradTo}`}
+                    />
+                    {/* Icon button */}
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 6 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 14 }}
+                      className={`relative w-[68px] h-[68px] rounded-2xl bg-gradient-to-br ${item.gradFrom} ${item.gradTo} flex items-center justify-center shadow-xl ${item.glowColor} z-10`}
+                    >
+                      <item.icon className="w-6 h-6 text-white drop-shadow" />
+                    </motion.div>
+                    {/* Step badge */}
+                    <motion.div
+                      initial={{ scale: 0, rotate: -180 }}
+                      whileInView={{ scale: 1, rotate: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 18, delay: i * 0.15 + 0.4 }}
+                      className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-white border-2 border-gray-100 flex items-center justify-center text-[9px] font-black text-gray-600 shadow-md z-20"
+                    >
+                      {item.step}
+                    </motion.div>
+                  </div>
+
+                  {/* Title */}
+                  <motion.h3
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: i * 0.15 + 0.25 }}
+                    className="text-[17px] font-extrabold text-[#0f172a] mb-2 tracking-tight"
+                  >
+                    {item.title}
+                  </motion.h3>
+
+                  {/* Description */}
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.15 + 0.35 }}
+                    className="text-gray-400 text-[13px] leading-[1.7] mb-5"
+                  >
+                    {item.desc}
+                  </motion.p>
+
+                  {/* Stat chip */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 22, delay: i * 0.15 + 0.5 }}
+                    className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full ${item.bgTint} border border-gray-100`}
+                  >
+                    <span className={`text-sm font-black bg-gradient-to-r ${item.statGrad} bg-clip-text text-transparent`}>
+                      {item.stat}
+                    </span>
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                      {item.statLabel}
+                    </span>
+                  </motion.div>
+
+                  {/* Bottom accent bar — expands on hover */}
+                  <motion.div
+                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[3px] bg-gradient-to-r ${item.gradFrom} ${item.gradTo} rounded-full`}
+                    initial={{ width: 0 }}
+                    whileHover={{ width: '60%' }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {/* CTA */}
@@ -849,16 +678,18 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.7 }}
+            transition={{ duration: 0.55, delay: 0.65 }}
             className="text-center mt-16"
           >
             <Link to="/feed">
               <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
+                whileHover={{ scale: 1.04, y: -3 }}
                 whileTap={{ scale: 0.97 }}
-                className="group relative px-9 py-4 bg-[#0f172a] hover:bg-[#1e293b] text-white font-bold text-sm rounded-full shadow-xl shadow-[#0f172a]/20 transition-all inline-flex items-center gap-2.5 cursor-pointer overflow-hidden"
+                className="group relative px-9 py-4 bg-[#0f172a] hover:bg-[#1a2540] text-white font-bold text-sm rounded-full shadow-xl shadow-[#0f172a]/20 transition-colors duration-300 inline-flex items-center gap-2.5 cursor-pointer overflow-hidden"
               >
-                <span className="relative z-10">Try it now</span>
+                {/* Indigo glow on hover */}
+                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4255d4]/20 to-violet-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                <span className="relative z-10">Try it now — it's free</span>
                 <motion.div
                   className="relative z-10"
                   animate={{ x: [0, 5, 0] }}
@@ -871,8 +702,19 @@ const Home = () => {
               </motion.button>
             </Link>
           </motion.div>
+
         </div>
       </section>
+
+
+
+
+
+
+
+
+
+
 
       {/* Globe Visualization Section - Dotted Earth Globe with Active Region Cards */}
       <section className="relative z-10 w-full pt-16 pb-32 border-t border-gray-200/50 bg-transparent flex flex-col items-center overflow-hidden">

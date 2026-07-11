@@ -1,4 +1,4 @@
-# NovaBrief - AI-Powered News Aggregator
+# DailyBrief - AI-Powered News Aggregator
 
 A personalized news aggregator built with React, FastAPI, LangChain, LangGraph, and Google Gemini.
 
